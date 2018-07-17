@@ -8,12 +8,16 @@ import ch.qos.logback.core.CoreConstants;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import ch.qos.logback.core.spi.DeferredProcessingAware;
 import ch.qos.logback.core.status.ErrorStatus;
+import com.google.gson.Gson;
 import com.luminory.component.elasticsearch.JestClientMgr;
 import com.luminroy.component.logger.model.EsLogVO;
 import com.luminroy.component.util.web.HostUtil;
 import io.searchbox.client.JestClient;
+import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Index;
 import lombok.Cleanup;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,6 +27,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@Slf4j
 public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
 
 	private JestClient jestClient;
@@ -91,43 +96,84 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
     
     private void save(E event) {
     	if(event instanceof LoggingEvent) {
-    		EsLogVO esLogVO = new EsLogVO();
-
-    		// 获得ip
-			esLogVO.setIp(HostUtil.getIP());
-
-			// 获得hostName
-			esLogVO.setHost(HostUtil.getHostName());
-
-	    	// 获得时间
-			String dateTime = getDateTime((LoggingEvent) event);
-			esLogVO.setDateTime(dateTime);
-
-	    	// 获得线程
-			String threadName = getThead((LoggingEvent) event);
-			esLogVO.setThread(threadName);
-	    	
-	    	// 获得日志等级
-			String level = getLevel((LoggingEvent) event);
-			esLogVO.setLevel(level);
-
-			// 获得调用信息
-			EsLogVO.Location location = getLocation((LoggingEvent) event);
-			esLogVO.setLocation(location);
-
-	        // 获得日志信息
-			String message = getMessage((LoggingEvent) event);
-			esLogVO.setMessage(message);
-	        
-	        // 获得异常信息
-			String throwable = getThrowable((LoggingEvent) event);
-			esLogVO.setThrowable(throwable);
-
+    		// 获得日志数据
+			EsLogVO esLogVO = createData((LoggingEvent) event);
 			// 保存到es中
+			save(esLogVO);
     	} else {
     		addWarn("the error type of event!");
     	}
     }
+
+	private void save(EsLogVO esLogVO) {
+		Gson gson = new Gson();
+		String jsonString = gson.toString();
+
+		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String esIndexFormat = esIndex.replace("#date#", sdf.format(Calendar.getInstance().getTime()));
+		Index index = new Index.Builder(esLogVO).index(esIndexFormat).type(esType).build();
+
+		try {
+			DocumentResult result = jestClient.execute(index);
+			log.info(result.toString());
+		} catch (Exception e) {
+			addStatus(new ErrorStatus("jestClient exec fail", this, e));
+		}
+	}
+
+	private EsLogVO createData(LoggingEvent event) {
+		EsLogVO esLogVO = new EsLogVO();
+
+		// 获得ip
+		esLogVO.setIp(HostUtil.getIP());
+
+		// 获得hostName
+		esLogVO.setHost(HostUtil.getHostName());
+
+		// 获得时间
+		String dateTime = getDateTime(event);
+		esLogVO.setDateTime(dateTime);
+
+		// 获得线程
+		String threadName = getThead(event);
+		esLogVO.setThread(threadName);
+
+		// 获得日志等级
+		String level = getLevel(event);
+		esLogVO.setLevel(level);
+
+		// 获得调用信息
+		EsLogVO.Location location = getLocation(event);
+		esLogVO.setLocation(location);
+
+		// 获得日志信息
+		String message = getMessage(event);
+		esLogVO.setMessage(message);
+
+		// 获得异常信息
+		String throwable = getThrowable(event);
+		esLogVO.setThrowable(throwable);
+
+		// 获得traceId
+		String traceId = getTraceId(event);
+		esLogVO.setTraceId(traceId);
+
+		// 获得rpcId
+		String rpcId = getRpcId(event);
+		esLogVO.setRpcId(rpcId);
+
+		return esLogVO;
+	}
+
+	private String getRpcId(LoggingEvent event) {
+		Map<String, String> mdcPropertyMap = event.getMDCPropertyMap();
+		return mdcPropertyMap.get("traceId");
+	}
+
+	private String getTraceId(LoggingEvent event) {
+		Map<String, String> mdcPropertyMap = event.getMDCPropertyMap();
+		return mdcPropertyMap.get("traceId");
+	}
 
 	private String getThrowable(LoggingEvent event) {
 		String exceptionStack = "";
