@@ -55,7 +55,6 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
 			jestClient.close();
 		} catch (IOException e) {
 			addStatus(new ErrorStatus("close jestClient fail", this, e));
-			e.printStackTrace();
 		}
 	}
 
@@ -229,10 +228,10 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
 				// 通过properties初始化es客户端
 				jestClient = new JestClientMgr(config).getJestClient();
 			} catch (Exception e) {
-				addWarn("获取配置信息失败！");
+				addStatus(new ErrorStatus("config fail", this, e));
 			}
 		} catch (Exception e) {
-			addWarn("获取配置信息失败！");
+			addStatus(new ErrorStatus("config fail", this, e));
 		}
 	}
     
