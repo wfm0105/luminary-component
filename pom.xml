@@ -10,6 +10,7 @@
     <modules>
         <module>luminroy-component-util</module>
         <module>luminory-component-elasticsearch</module>
+        <module>luminroy-component-logger</module>
     </modules>
     <packaging>pom</packaging>
 

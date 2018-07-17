@@ -1,1 +1,3 @@
 *.iml
+luminory-component-elasticsearch/target/
+luminroy-component-util/target/
