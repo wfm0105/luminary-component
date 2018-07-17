@@ -1,4 +1,4 @@
-package com.luminroy.component.logger.model.appender;
+package com.luminroy.component.logger.appender;
 
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.LoggingEvent;

@@ -1,4 +1,4 @@
-luminory-component-elasticsearch/target/
-luminroy-component-logger/target/
-luminroy-component-util/target/
 *.iml
+luminory-component-elasticsearch/target/
+luminroy-component-util/target/
+luminroy-component-logger/target/
