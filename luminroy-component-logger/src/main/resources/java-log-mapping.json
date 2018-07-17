@@ -24,10 +24,61 @@
         },
         {
           "throwable_field": {
-
+            "match_mapping_type": "string",
+            "path_match": "throwable",
+            "mapping": {
+              "norms": false,
+              "type": "text",
+              "analyzer": "ik_max_word",
+              "search_analyzer": "ik_max_word"
             }
+          }
+        },
+        {
+          "string_field": {
+            "match_mapping_type": "string",
+            "match": "*",
+            "mapping": {
+              "norms": false,
+              "type": "text",
+              "analyzer": "ik_max_word",
+              "search_analyzer": "ik_max_word",
+              "fields": {
+                  "keyword": {
+                    "type": "keyword"
+                  }
+              }
+            }
+          }
         }
-      ]
+      ],
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "env": {
+          "type": "keyword"
+        },
+        "host": {
+          "type": "host"
+        },
+        "ip": {
+          "type": "ip"
+        },
+        "level": {
+          "level": "keyword"
+        },
+        "location": {
+          "properties": {
+            "line": {
+               "type": "integer"
+            }
+          }
+        },
+        "timestamp": {
+          "type": "date"
+        }
+      }
     }
   }
 }
