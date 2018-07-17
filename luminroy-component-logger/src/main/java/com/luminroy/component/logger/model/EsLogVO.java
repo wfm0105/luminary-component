@@ -2,6 +2,13 @@ package com.luminroy.component.logger.model;
 
 import lombok.Data;
 
+/**
+ *
+ * 日志对象
+ *
+ * @author wulinfeng
+ * @date 2018/7/17 19:43
+ */
 @Data
 public class EsLogVO {
 

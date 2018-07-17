@@ -27,6 +27,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ *
+ * elasticsearch的appender
+ *
+ * @author wulinfeng
+ * @date 2018/7/17 19:42
+ */
 @Slf4j
 public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
 
