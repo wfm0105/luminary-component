@@ -9,6 +9,7 @@
     <version>1.0.0</version>
     <modules>
         <module>luminroy-component-util</module>
+        <module>luminory-component-elasticsearch</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -19,7 +20,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.platform.version>Cairo-SR2</spring.platform.version>
-        <lombok.version>1.18.0</lombok.version>
         <easypoi.version>2.3.1</easypoi.version>
         <self.version>1.0.0</self.version>
         <skipTests>true</skipTests>
