@@ -1,4 +1,4 @@
-#PUT _template/java-log
+//PUT _template/java-log
 {
   "template": "java-log-*",
   "order": 0,
@@ -60,13 +60,13 @@
           "type": "keyword"
         },
         "host": {
-          "type": "host"
+          "type": "keyword"
         },
         "ip": {
           "type": "ip"
         },
         "level": {
-          "level": "keyword"
+          "type": "keyword"
         },
         "location": {
           "properties": {
@@ -75,7 +75,7 @@
             }
           }
         },
-        "timestamp": {
+        "dataTime": {
           "type": "date"
         }
       }

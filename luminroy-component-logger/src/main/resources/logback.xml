@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds">
+              
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%boldYellow(%date) [%thread] %highlight(%-5level) %boldGreen(%logger{36}) %boldMagenta(%M %L) - %msg%n" />   
+              
+    <property name="CONSOLE_LOG_PATTERN_IDE"
+              value="%date [%thread] %-5level %logger{36} %M %L - %msg%n" />   
+              
+    <property name="CONSOLE_LOG_PATTERN_CALLER_IDE"
+              value="%date [%thread] %-5level %caller{3} - %msg%n" />
+
+	<appender name="ES" class="com.luminroy.component.logger.appender.ElasticsearchAppender">
+		<env>test</env>
+		<esType>demo</esType>
+		<withJansi>true</withJansi>
+		<encoder>
+			<pattern>${CONSOLE_LOG_PATTERN_IDE}</pattern>
+			<charset>utf8</charset>
+		</encoder>
+	</appender>
+
+	<!-- <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+           <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+		   <charset>utf8</charset>
+   		</encoder>
+    </appender>       -->
+    
+     <appender name="stdout_ide" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+           <pattern>${CONSOLE_LOG_PATTERN_IDE}</pattern>
+		   <charset>utf8</charset>
+   		</encoder>
+    </appender>    
+    
+    <!-- <appender name="stdout_caller_ide" class="ch.qos.logback.core.ConsoleAppender">
+    	<withJansi>true</withJansi>
+		<encoder>
+           <pattern>${CONSOLE_LOG_PATTERN_CALLER_IDE}</pattern>
+		   <charset>utf8</charset>
+   		</encoder>
+    </appender>        -->
+    
+    <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	  <File>main.log</File>
+	  <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	    <FileNamePattern>main.%d{yyyy-MM-dd}.log</FileNamePattern>
+	    <maxHistory>30</maxHistory>         
+	  </rollingPolicy>
+	  <encoder>
+	    <Pattern>%boldYellow(%d{HH:mm:ss.SSS}) [%thread] %highlight(%-5level) %boldGreen(%logger{35}) %boldMagenta(%M %L) - %msg %n</Pattern>
+	  </encoder>        
+	   <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+	    <level>DEBUG</level>
+	  </filter>
+	</appender>
+
+	<appender name="ASYNC_ES" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <appender-ref ref="ES"/>
+        <includeCallerData>true</includeCallerData>
+	</appender>
+
+    <logger name="com.luminroy.component.logger" additivity="true">
+        <level value="info"></level>
+        <appender-ref ref="ASYNC_ES" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="stdout_ide" />
+    </root>
+          
+    <!--<springProfile name="!production">
+    	<logger name="com.avic.cf" level="DEBUG" />
+        <logger name="org.springframework.web" level="INFO"/>
+        <root level="info">  
+	        <appender-ref ref="stdout_ide" />
+			<appender-ref ref="test" />
+		</root>
+    </springProfile>
+    
+    <springProfile name="production"> 
+    	<logger name="com.avic.cf" level="DEBUG" />
+        <logger name="org.springframework.web" level="INFO"/>
+        <root level="info">  
+	        <appender-ref ref="stdout" />  
+	        <appender-ref ref="dailyRollingFileAppender" />  
+	    </root> 
+	</springProfile>-->
+</configuration>

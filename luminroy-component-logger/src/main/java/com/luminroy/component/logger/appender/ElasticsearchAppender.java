@@ -122,7 +122,7 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
 
 		try {
 			DocumentResult result = jestClient.execute(index);
-			log.info(result.toString());
+			addInfo(result.toString());
 		} catch (Exception e) {
 			addStatus(new ErrorStatus("jestClient exec fail", this, e));
 		}
@@ -138,7 +138,7 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
 		esLogVO.setHost(HostUtil.getHostName());
 
 		// 获得时间
-		String dateTime = getDateTime(event);
+		long dateTime = getDateTime(event);
 		esLogVO.setDateTime(dateTime);
 
 		// 获得线程
@@ -242,10 +242,8 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
 		return event.getThreadName();
 	}
 
-	private String getDateTime(LoggingEvent event) {
-		long timestamp = ((LoggingEvent) event).getTimeStamp();
-		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-		return sdf.format(new Date(timestamp));
+	private long getDateTime(LoggingEvent event) {
+		return ((LoggingEvent) event).getTimeStamp();
 	}
 
     private void init() {
@@ -267,21 +265,23 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
 				addWarn("没有获取到配置信息！");
 				// 用默认信息初始化es客户端
 				jestClient = new JestClientMgr().getJestClient();
-			}
+			} else {
 
-			if(esConfigPathSet.size() > 1) {
-				addWarn("获取到多个配置信息,将以第一个为准！");
-			}
+				if (esConfigPathSet.size() > 1) {
+					addWarn("获取到多个配置信息,将以第一个为准！");
+				}
 
-			URL path = esConfigPathSet.iterator().next();
-			try {
-				Properties config = new Properties();
-				@Cleanup InputStream input = new FileInputStream(path.getPath());
-				config.load(input);
-				// 通过properties初始化es客户端
-				jestClient = new JestClientMgr(config).getJestClient();
-			} catch (Exception e) {
-				addStatus(new ErrorStatus("config fail", this, e));
+				URL path = esConfigPathSet.iterator().next();
+				try {
+					Properties config = new Properties();
+					@Cleanup InputStream input = new FileInputStream(path.getPath());
+					config.load(input);
+					// 通过properties初始化es客户端
+					jestClient = new JestClientMgr(config).getJestClient();
+				} catch (Exception e) {
+					addStatus(new ErrorStatus("config fail", this, e));
+				}
+
 			}
 		} catch (Exception e) {
 			addStatus(new ErrorStatus("config fail", this, e));

@@ -16,7 +16,7 @@ public class EsLogVO {
     private String ip;
     private String env;
     private String message;
-    private String dateTime;
+    private long dateTime;
     private String logger;
     private String level;
     private String thread;
