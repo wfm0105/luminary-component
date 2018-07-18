@@ -2,3 +2,8 @@ luminory-component-elasticsearch/target/
 luminroy-component-logger/target/
 luminroy-component-util/target/
 *.iml
+luminroy-component-logger-demo/target/
+luminroy-component-logger-spring-boot-starter/target/
+.project
+.settings/
+luminroy-component-elasticsearch-spring-boot-starter/target/
