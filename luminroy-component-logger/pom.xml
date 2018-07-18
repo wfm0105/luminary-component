@@ -23,6 +23,7 @@
             <artifactId>luminory-component-elasticsearch</artifactId>
             <version>${self.version}</version>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -35,23 +35,23 @@ import java.util.*;
  * @date 2018/7/17 19:42
  */
 @Slf4j
-public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
+public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> implements LuminroyLoggerAppender<E> {
 
-	private JestClient jestClient;
+	protected JestClient jestClient;
 
 	private static final String CONFIG_PROPERTIES_NAME = "es.properties";
 
 	// 可在xml中配置的属性
 	@Setter
-	private String esIndex = "java-log-#date#"; // 索引
+	protected String esIndex = "java-log-#date#"; // 索引
 	@Setter
-	private String esType = "java-log";	// 类型
+	protected String esType = "java-log";	// 类型
 	@Setter
-	private boolean isLocationInfo = true;	// 是否打印行号
+	protected boolean isLocationInfo = true;	// 是否打印行号
 	@Setter
-	private String env = "";	// 运行环境
+	protected String env = "";	// 运行环境
 	@Setter
-	private String esAddress = ""; //	地址
+	protected String esAddress = ""; //	地址
 
 	@Override
 	public void start() {
@@ -262,9 +262,12 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
 			}
 
 			if(esConfigPathSet.size() == 0) {
-				addWarn("没有获取到配置信息！");
-				// 用默认信息初始化es客户端
-				jestClient = new JestClientMgr().getJestClient();
+				subInit();
+				if(jestClient == null) {
+					addWarn("没有获取到配置信息！");
+					// 用默认信息初始化es客户端
+					jestClient = new JestClientMgr().getJestClient();
+				}
 			} else {
 
 				if (esConfigPathSet.size() > 1) {
@@ -286,6 +289,11 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
 		} catch (Exception e) {
 			addStatus(new ErrorStatus("config fail", this, e));
 		}
+	}
+
+	@Override
+	public void subInit() {
+		// template method
 	}
     
 }
