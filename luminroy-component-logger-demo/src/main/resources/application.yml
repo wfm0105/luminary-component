@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: user-server
+
+luminroy: 
+  elasticsearch:
+    username: elastic
+    password: 123456
+    server: 
+      - 127.0.0.1:9200
+    multiThreaded: true
+    maxTotalConnection: 20
+    maxTotalConnectionPerRoute: 5
+    discoveryEnabled: true
+    discorveryFrequency: 60
