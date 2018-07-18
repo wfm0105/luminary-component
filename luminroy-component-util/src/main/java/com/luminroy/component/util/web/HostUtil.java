@@ -20,7 +20,7 @@ public class HostUtil {
             log.error("未知的主机！", e);
             e.printStackTrace();
         }
-        return addr.getHostAddress();
+        return addr.getHostName();
     }
 
     public static String getIP() {
@@ -31,7 +31,7 @@ public class HostUtil {
             log.error("未知的主机！", e);
             e.printStackTrace();
         }
-        return addr.getHostName();
+        return addr.getHostAddress();
     }
 
     public static String getIP(HttpServletRequest request) {
