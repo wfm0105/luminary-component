@@ -77,6 +77,12 @@
         },
         "dataTime": {
           "type": "date"
+        },
+        "traceId": {
+          "type": "keyword"
+        },
+        "rpcId": {
+          "type": "rpcId"
         }
       }
     }

@@ -174,7 +174,7 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> {
 
 	private String getRpcId(LoggingEvent event) {
 		Map<String, String> mdcPropertyMap = event.getMDCPropertyMap();
-		return mdcPropertyMap.get("traceId");
+		return mdcPropertyMap.get("rpcId");
 	}
 
 	private String getTraceId(LoggingEvent event) {
