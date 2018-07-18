@@ -25,7 +25,7 @@ public class JestClientMgr {
     private static final String CONFIG_PROPERTIES_NAME = "es.properties";
 
     private JestClient jestClient;
-    private JestConfig config;
+    protected JestConfig config;
 
     public JestClientMgr() {
 
