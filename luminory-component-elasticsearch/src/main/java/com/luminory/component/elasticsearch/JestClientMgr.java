@@ -125,32 +125,34 @@ public class JestClientMgr {
         Optional.ofNullable(
                 properties.get("es.multiThreaded")
         ).ifPresent(value->{
-            config.setMultiThreaded((boolean) value);
+            config.setMultiThreaded(Boolean.valueOf((String) value));
         });
 
         Optional.ofNullable(
                 properties.get("es.maxTotalConnection")
         ).ifPresent(value->{
-            config.setMaxTotalConnection((int) value);
+            config.setMaxTotalConnection(Integer.valueOf((String) value));
         });
 
         Optional.ofNullable(
                 properties.get("es.maxTotalConnectionPerRoute")
         ).ifPresent(value->{
-            config.setMaxTotalConnectionPerRoute((int) value);
+            config.setMaxTotalConnectionPerRoute(Integer.valueOf((String) value));
         });
 
         Optional.ofNullable(
                 properties.get("es.discoveryEnabled")
         ).ifPresent(value->{
-            config.setDiscoveryEnabled((boolean) value);
+            config.setDiscoveryEnabled(Boolean.valueOf((String) value));
         });
 
         Optional.ofNullable(
                 properties.get("es.discorveryFrequency")
         ).ifPresent(value->{
-            config.setDiscorveryFrequency((int) value);
+            config.setDiscorveryFrequency(Integer.valueOf((String) value));
         });
+
+        this.config = config;
     }
 
 }
