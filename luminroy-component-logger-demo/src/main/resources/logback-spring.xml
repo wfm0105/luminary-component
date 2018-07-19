@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="10 seconds">
 
+	<springProperty scope="context" name="profile" source="spring.profiles.active"
+					defaultValue="dev"/>
+
 	<springProperty scope="context" name="esUserName" source="luminroy.elasticsearch.username"
 					defaultValue="elastic"/>
 
@@ -43,7 +46,7 @@
 	</appender>
 
 	<appender name="ES" class="com.luminroy.component.logger.appender.SpringElasticsearchAppender">
-		<env>abc</env>
+		<profile>${profile}</profile>
 		<esType>demo</esType>
 		<username>${esUserName}</username>
 		<password>${esPassword}</password>
