@@ -7,3 +7,4 @@ luminroy-component-logger-spring-boot-starter/target/
 .project
 .settings/
 luminroy-component-elasticsearch-spring-boot-starter/target/
+luminory-component-elasticsearch/.classpath
