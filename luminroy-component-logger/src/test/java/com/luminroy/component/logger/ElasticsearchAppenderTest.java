@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class elasticsearchAppenderTest {
+public class ElasticsearchAppenderTest {
 
     @Test
     public void loggerTest() throws InterruptedException {
