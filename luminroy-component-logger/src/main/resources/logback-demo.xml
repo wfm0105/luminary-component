@@ -11,7 +11,7 @@
               value="%date [%thread] %-5level %caller{3} - %msg%n" />
 
 	<appender name="ES" class="com.luminroy.component.logger.appender.ElasticsearchAppender">
-		<env>test</env>
+		<profile>test</profile>
 		<esType>demo</esType>
 		<withJansi>true</withJansi>
 		<encoder>

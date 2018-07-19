@@ -8,6 +8,8 @@ import ch.qos.logback.core.CoreConstants;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import ch.qos.logback.core.spi.DeferredProcessingAware;
 import ch.qos.logback.core.status.ErrorStatus;
+import ch.qos.logback.core.status.InfoStatus;
+
 import com.google.gson.Gson;
 import com.luminory.component.elasticsearch.JestClientMgr;
 import com.luminroy.component.logger.model.EsLogVO;
@@ -49,7 +51,7 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> impl
 	@Setter
 	protected boolean isLocationInfo = true;	// 是否打印行号
 	@Setter
-	protected String env = "";	// 运行环境
+	protected String profile = "";	// 运行环境
 	@Setter
 	protected String esAddress = ""; //	地址
 
@@ -122,7 +124,7 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> impl
 
 		try {
 			DocumentResult result = jestClient.execute(index);
-			addInfo(result.toString());
+			addStatus(new InfoStatus("es logger result:"+result.toString(), this));
 		} catch (Exception e) {
 			addStatus(new ErrorStatus("jestClient exec fail", this, e));
 		}
@@ -131,6 +133,9 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> impl
 	private EsLogVO createData(LoggingEvent event) {
 		EsLogVO esLogVO = new EsLogVO();
 
+		// 获得profile
+		esLogVO.setProfile(profile);
+		
 		// 获得ip
 		esLogVO.setIp(HostUtil.getIP());
 

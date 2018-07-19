@@ -14,7 +14,7 @@ public class EsLogVO {
 
     private String host;
     private String ip;
-    private String env;
+    private String profile;
     private String message;
     private long dateTime;
     private String logger;

@@ -56,7 +56,7 @@
         "enabled": false
       },
       "properties": {
-        "env": {
+        "profile": {
           "type": "keyword"
         },
         "host": {
@@ -82,7 +82,7 @@
           "type": "keyword"
         },
         "rpcId": {
-          "type": "rpcId"
+          "type": "keyword"
         }
       }
     }
