@@ -14,6 +14,7 @@
         <module>luminroy-component-logger-demo</module>
         <module>luminroy-component-elasticsearch-spring-boot-starter</module>
         <module>luminroy-component-logger-spring-boot-starter</module>
+        <module>luminroy-component-trace</module>
     </modules>
    
     <packaging>pom</packaging>
