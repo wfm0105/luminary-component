@@ -11,3 +11,5 @@ luminory-component-elasticsearch/.classpath
 luminroy-component-util/.classpath
 luminroy-component-logger-spring-boot-starter/.classpath
 luminroy-component-trace/target/
+luminroy-component-trace-demo/target/
+luminroy-component-trace-spring-boot-starter/target/

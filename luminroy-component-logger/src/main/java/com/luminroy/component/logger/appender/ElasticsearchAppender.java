@@ -124,7 +124,7 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> impl
 
 		try {
 			DocumentResult result = jestClient.execute(index);
-			addStatus(new InfoStatus("es logger result:"+result.toString(), this));
+			addStatus(new InfoStatus("es logger result:"+result.getJsonString(), this));
 		} catch (Exception e) {
 			addStatus(new ErrorStatus("jestClient exec fail", this, e));
 		}

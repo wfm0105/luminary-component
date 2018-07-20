@@ -1,6 +1,6 @@
 spring:
   application:
-    name: logger-demo-server
+    name: trace-demo-server
 
 luminroy: 
   elasticsearch:
@@ -13,3 +13,7 @@ luminroy:
     maxTotalConnectionPerRoute: 5
     discoveryEnabled: true
     discorveryFrequency: 60
+    
+  trace: 
+    esIndex: trace-demo-${date} 
+    esType: demo

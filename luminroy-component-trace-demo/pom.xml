@@ -5,25 +5,19 @@
     <artifactId>luminroy-component</artifactId>
     <version>1.0.0</version>
   </parent>
-  <artifactId>luminroy-component-trace</artifactId>
+  <artifactId>luminroy-component-trace-demo</artifactId>
   
   <dependencies>
   
   	<dependency>
   		<groupId>com.luminroy.component</groupId>
-  		<artifactId>luminroy-component-util</artifactId>
+  		<artifactId>luminroy-component-trace-spring-boot-starter</artifactId>
   		<version>${self.version}</version>
   	</dependency>
-  
+  	
   	<dependency>
-  		<groupId>com.luminroy.component</groupId>
-  		<artifactId>luminory-component-elasticsearch</artifactId>
-  		<version>${self.version}</version>
-  	</dependency>
-
-  	<dependency>
-  		<groupId>javax.servlet</groupId>
-  		<artifactId>javax.servlet-api</artifactId>
+  		<groupId>org.springframework.boot</groupId>  
+        <artifactId>spring-boot-starter-web</artifactId>  
   	</dependency>
   	
   </dependencies>
