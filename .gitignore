@@ -13,3 +13,6 @@ luminroy-component-logger-spring-boot-starter/.classpath
 luminroy-component-trace/target/
 luminroy-component-trace-demo/target/
 luminroy-component-trace-spring-boot-starter/target/
+luminroy-component-feign/target/
+luminroy-component-hystrix/target/
+luminroy-component-trace-demo2/target/

@@ -1,9 +1,6 @@
 spring:
   application:
-    name: trace-demo-server
-    
-server: 
-  port: 8088
+    name: trace-demo2-server
 
 luminroy: 
   elasticsearch:

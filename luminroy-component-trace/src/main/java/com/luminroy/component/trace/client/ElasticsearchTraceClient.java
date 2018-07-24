@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 * @date 2018年7月20日下午1:35:18
 */
 @Slf4j
-public class ElasticsearchTranceClient implements TraceClient {
+public class ElasticsearchTraceClient implements TraceClient {
 
 	 private static final String CONFIG_PROPERTIES_NAME = "trace.properties";
 	
@@ -47,7 +47,7 @@ public class ElasticsearchTranceClient implements TraceClient {
 	
 	private TraceConfig traceConfig;
 	
-	public ElasticsearchTranceClient() {
+	public ElasticsearchTraceClient() {
 		try { 
 			 Properties properties = new Properties();
 	         @Cleanup InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(CONFIG_PROPERTIES_NAME);
@@ -66,7 +66,7 @@ public class ElasticsearchTranceClient implements TraceClient {
 		}
 	}
 	
-	public ElasticsearchTranceClient(TraceConfig traceConfig) {
+	public ElasticsearchTraceClient(TraceConfig traceConfig) {
 		if(traceConfig == null) {
 			log.warn("使用默认的配置！");
 			this.traceConfig = new TraceConfig();
@@ -76,12 +76,12 @@ public class ElasticsearchTranceClient implements TraceClient {
 		this.traceConfig.setEsIndex(this.traceConfig.getEsIndex().replace("${date}", DateUtil.formatYearMonthDay(Calendar.getInstance().getTime())));
 	}
 	
-	public ElasticsearchTranceClient(TraceConfig traceConfig, JestClient jestClient) {
+	public ElasticsearchTraceClient(TraceConfig traceConfig, JestClient jestClient) {
 		this(traceConfig);
-		ElasticsearchTranceClient.jestClient = jestClient;
+		ElasticsearchTraceClient.jestClient = jestClient;
 	}
 
-	public ElasticsearchTranceClient(@NonNull String path) throws IOException {
+	public ElasticsearchTraceClient(@NonNull String path) throws IOException {
         Properties properties = new Properties();
         @Cleanup InputStream input = new FileInputStream(new File(path));
         properties.load(input);
@@ -90,7 +90,7 @@ public class ElasticsearchTranceClient implements TraceClient {
         this.traceConfig.setEsIndex(this.traceConfig.getEsIndex().replace("${date}", DateUtil.formatYearMonthDay(Calendar.getInstance().getTime())));
     }
 
-    public ElasticsearchTranceClient(@NonNull Properties properties) {
+    public ElasticsearchTraceClient(@NonNull Properties properties) {
         configByProperties(properties);
         this.traceConfig.setEsIndex(this.traceConfig.getEsIndex().replace("${date}", DateUtil.formatYearMonthDay(Calendar.getInstance().getTime())));
     }

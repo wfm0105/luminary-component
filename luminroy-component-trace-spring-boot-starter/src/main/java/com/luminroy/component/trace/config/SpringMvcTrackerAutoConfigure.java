@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.luminory.component.elasticsearch.JestClientMgr;
-import com.luminroy.component.trace.client.ElasticsearchTranceClient;
+import com.luminroy.component.trace.client.ElasticsearchTraceClient;
 import com.luminroy.component.trace.client.TraceClient;
 import com.luminroy.component.trace.holder.MvcHolder;
 import com.luminroy.component.trace.interceptor.TraceInteceptor;
@@ -52,7 +52,7 @@ public class SpringMvcTrackerAutoConfigure implements WebMvcConfigurer {
 		 TraceConfig traceConfig = new TraceConfig();
 		 traceConfig.setEsIndex(traceProperties.getEsIndex());
 		 traceConfig.setEsType(traceProperties.getEsType());
-		 TraceClient traceClient = new ElasticsearchTranceClient(traceConfig, jestClientMgr.getJestClient());
+		 TraceClient traceClient = new ElasticsearchTraceClient(traceConfig, jestClientMgr.getJestClient());
 		 return traceClient;
 	 }
 	 

@@ -19,6 +19,10 @@ import lombok.Data;
 @Data
 public class RpcTraceInfoVO {
 
+	public static final String RESULT_SUCCESS = "OK";
+	
+	public static final String RESULT_FAILURE = "ERROR";
+	
 	private String traceId; // 链路跟踪的id
 	private String rpcId; // 调用id
 	private String rpcType; // 类型
@@ -26,7 +30,7 @@ public class RpcTraceInfoVO {
 	private String clientHost; // 客户端主机名
 	private String serviceCategory; // 服务大类
 	private String serviceName; // 服务名
-	private String serviceHostName; // 服务主机名
+	private String serviceHost; // 服务主机名
 	private String methodName; // 方法名
 	private String requestDateTime; // 请求时间
 	private String requestJson; // 请求参数

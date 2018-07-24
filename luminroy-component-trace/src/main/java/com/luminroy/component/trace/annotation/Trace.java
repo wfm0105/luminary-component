@@ -5,6 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.core.annotation.AliasFor;
+
+import com.luminroy.component.trace.tracker.Tracker;
+
 /**
  * 
 * <p>Title: 链路跟踪注解</p>  
@@ -16,6 +20,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Trace {
 
-	
+	Class<? extends Tracker> value();
 	
 }

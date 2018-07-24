@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.luminroy.component.util.common.UUIDUtil;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**  
 * <p>Title: TraceInfo</p>  
@@ -22,9 +23,14 @@ import lombok.Data;
 * @author wulinfeng
 * @date 2018年7月20日上午11:44:16
 */
+@Slf4j
 @Data
 public class TraceInfo {
 
+	public static final String TRACE_ID_KEY = "traceId";
+	
+	public static final String RPC_ID_KEY = "rpcId";
+	
 	/**
 	 * 
 	 * 链路跟踪的id
@@ -52,11 +58,13 @@ public class TraceInfo {
 		this.traceId = UUIDUtil.uuid32();
 		this.hierarchy = "";
 		this.sequenceNo = new AtomicInteger(1);
+		log.info(String.format("new traceInfo hierarchy=%s, sequenceNo=%s", this.hierarchy, this.sequenceNo));
 	}
 	
 	public TraceInfo(String traceId, String rpcId) {
 		this.traceId = traceId;
 		setRpcId(rpcId);
+		log.info(String.format("new traceInfo hierarchy=%s, rpcId=%s", this.hierarchy, rpcId));
 	}
 	
 	/**
@@ -67,6 +75,7 @@ public class TraceInfo {
 	 */
 	public TraceInfo addSequenceNo() {
 		this.sequenceNo.incrementAndGet();
+		log.info(String.format("addSequenceNo hierarchy=%s, sequenceNo=%s", this.hierarchy, this.sequenceNo));
 		return this;
 	}
 	
@@ -79,6 +88,7 @@ public class TraceInfo {
 	public TraceInfo addHierarchy() {
 		this.hierarchy = getRpcId();
 		this.sequenceNo = new AtomicInteger(0);
+		log.info(String.format("addHierarchy hierarchy=%s, sequenceNo=%s", this.hierarchy, this.sequenceNo));
 		return this;
 	}
 	
@@ -97,7 +107,7 @@ public class TraceInfo {
 			this.hierarchy = "";
 			this.sequenceNo = new AtomicInteger(Integer.valueOf(rpcId));
 		}
-		
+		log.info(String.format("setRpcId hierarchy=%s, sequenceNo=%s", this.hierarchy, this.sequenceNo));
 	}
 	
 	/**

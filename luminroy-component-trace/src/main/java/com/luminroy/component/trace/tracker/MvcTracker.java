@@ -9,12 +9,14 @@
 package com.luminroy.component.trace.tracker;
 
 import java.util.Calendar;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.slf4j.MDC;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.web.method.HandlerMethod;
 
 import com.google.gson.Gson;
@@ -24,6 +26,7 @@ import com.luminroy.component.trace.model.RpcTraceInfoVO;
 import com.luminroy.component.trace.model.RpcTypeEnum;
 import com.luminroy.component.trace.model.TraceInfo;
 import com.luminroy.component.trace.thread.TraceContext;
+import com.luminroy.component.util.common.TargetUtils;
 import com.luminroy.component.util.web.HostUtil;
 
 /**  
@@ -37,6 +40,10 @@ import com.luminroy.component.util.web.HostUtil;
 public class MvcTracker implements Tracker<MvcHolder> {
 
 	private static final FastDateFormat ISO_DATETIME_TIME_ZONE_FORMAT_WITH_MILLIS = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+	
+	protected static final String BEGIN_TIME_KEY = "beginTime";
+	
+	protected static final String RPC_TRACE_INFO_VO_KEY = "rpcTraceInfoVO";
 	
 	protected TraceClient traceClient;
 	
@@ -56,17 +63,40 @@ public class MvcTracker implements Tracker<MvcHolder> {
 	
 	private void initTraceData (HttpServletRequest request, Object handler) {
 		// 开始时间
-		request.setAttribute("beginTime", System.currentTimeMillis());
+		request.setAttribute(BEGIN_TIME_KEY, System.currentTimeMillis());
 		// 为当前线程设置上下文
 		TraceContext.init();
 		// 链路跟踪信息基础对象
 		TraceInfo traceInfo = new TraceInfo();
 		
+		String traceIdFromHeader = request.getHeader(TraceInfo.TRACE_ID_KEY);
+		
+		Optional.ofNullable(traceIdFromHeader)
+			.ifPresent(traceId->{
+			traceInfo.setTraceId(traceId);
+		});
+		
+		Optional.ofNullable(
+				request.getHeader(TraceInfo.RPC_ID_KEY)
+		).ifPresent(rpcId->{
+			traceInfo.setRpcId(rpcId);
+		});
+		
 		// 封装链路跟踪数据
-		if(handler != null && handler instanceof HandlerMethod) {
-			 HandlerMethod handlerMethod = (HandlerMethod) handler;
+		if(handler != null && handler instanceof HandlerMethod && traceIdFromHeader == null) {
+			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			 
-			 Gson gson =new Gson();
+			Gson gson =new Gson();
+			 
+			String serviceName = null;
+			try {
+				serviceName = TargetUtils.getTarget(handlerMethod.getBean()).getClass().getSimpleName();
+			} catch (Exception e) {
+				 serviceName = handlerMethod.getBean().getClass().getSimpleName();
+			}
+			 if(serviceName == null) {
+				 serviceName = handlerMethod.getBean().getClass().getSimpleName();
+			 }
 			 
 			 RpcTraceInfoVO rpcTraceInfoVO = new RpcTraceInfoVO();
 			 rpcTraceInfoVO.setRequestDateTime(ISO_DATETIME_TIME_ZONE_FORMAT_WITH_MILLIS.format(Calendar.getInstance().getTime()));
@@ -74,13 +104,13 @@ public class MvcTracker implements Tracker<MvcHolder> {
 			 rpcTraceInfoVO.setRpcId(traceInfo.getRpcId());
 			 rpcTraceInfoVO.setRpcType(RpcTypeEnum.HTTP.name());
 			 rpcTraceInfoVO.setServiceCategory("spring mvc");
-			 rpcTraceInfoVO.setServiceName(handlerMethod.getBean().getClass().getSimpleName());
+			 rpcTraceInfoVO.setServiceName(AopUtils.getTargetClass(handlerMethod.getBean().getClass()).getSimpleName());
 			 rpcTraceInfoVO.setMethodName(handlerMethod.getMethod().getName());
 			 rpcTraceInfoVO.setRequestJson(gson.toJson(request.getParameterMap()));
-			 rpcTraceInfoVO.setServiceHostName(HostUtil.getIP()+":"+request.getLocalPort()+request.getServletPath());
+			 rpcTraceInfoVO.setServiceHost(HostUtil.getIP()+":"+request.getLocalPort()+request.getServletPath());
 			 rpcTraceInfoVO.setClientHost(HostUtil.getIP(request));
 			 
-			 request.setAttribute("rpcTraceInfoVO", rpcTraceInfoVO);
+			 request.setAttribute(RPC_TRACE_INFO_VO_KEY, rpcTraceInfoVO);
 		}
 		
 		// 增加层级
@@ -88,31 +118,36 @@ public class MvcTracker implements Tracker<MvcHolder> {
 		
 		// 链路跟踪信息保存到当前线程上下文中
 		TraceContext.putTraceInfo(traceInfo);
-		MDC.put("traceId", traceInfo.getTraceId());
-		MDC.put("rpcId", traceInfo.getRpcId());
+		MDC.put(TraceInfo.TRACE_ID_KEY, traceInfo.getTraceId());
+		MDC.put(TraceInfo.RPC_ID_KEY, traceInfo.getRpcId());
 	}
 	
 	private void finishTraceData(HttpServletRequest request, HttpServletResponse response, Exception ex) {
 		try {
-			RpcTraceInfoVO rpcTraceInfoVO = (RpcTraceInfoVO) request.getAttribute("rpcTraceInfoVO");
+			String traceIdFromHeader = request.getHeader(TraceInfo.TRACE_ID_KEY);
+			if(traceIdFromHeader != null)
+				return;
+			RpcTraceInfoVO rpcTraceInfoVO = (RpcTraceInfoVO) request.getAttribute(RPC_TRACE_INFO_VO_KEY);
 			if(rpcTraceInfoVO != null) {
-					long beginTime = (Long) request.getAttribute("beginTime");
+					long beginTime = (Long) request.getAttribute(BEGIN_TIME_KEY);
 					rpcTraceInfoVO.setRunTime(System.currentTimeMillis() - beginTime);
 					if(ex == null) {
-						rpcTraceInfoVO.setResult("OK");
+						rpcTraceInfoVO.setResult(RpcTraceInfoVO.RESULT_SUCCESS);
 					} else {
-						rpcTraceInfoVO.setResult("ERROR");
+						rpcTraceInfoVO.setResult(RpcTraceInfoVO.RESULT_FAILURE);
 						rpcTraceInfoVO.setResponseJson(ex.getMessage());
 					}
+					Gson gson = new Gson();
+					log.debug(gson.toJson(rpcTraceInfoVO));
 					traceClient.sendTraceInfo(rpcTraceInfoVO);
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		} finally {
-			request.removeAttribute("rpcTraceInfoVO");
+			request.removeAttribute(RPC_TRACE_INFO_VO_KEY);
 			TraceContext.removeTraceInfo();
-			MDC.remove("traceId");
-			MDC.remove("rpcId");
+			MDC.remove(TraceInfo.TRACE_ID_KEY);
+			MDC.remove(TraceInfo.RPC_ID_KEY);
 		}
 	}
 	

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.luminroy.component.trace.annotation.Trace;
 import com.luminroy.component.trace.holder.MvcHolder;
+import com.luminroy.component.trace.tracker.SpringMvcTracker;
 import com.luminroy.component.trace.tracker.Tracker;
 
 import lombok.extern.slf4j.Slf4j;
@@ -85,6 +86,9 @@ public class TraceInteceptor extends HandlerInterceptorAdapter {
         Object annoation = getAnnotation(handler);
         if (annoation == null)
             return false;
+        Trace trace = (Trace) annoation;
+        if(!trace.value().getName().equals(SpringMvcTracker.class.getName()))
+        	return false;
         return true;
     }
 	

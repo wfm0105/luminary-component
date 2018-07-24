@@ -39,4 +39,14 @@ public interface Tracker<T> {
 		log.warn("默认空实现！");
 	};
 	
+	/**
+	 * 
+	 * <p>Title: exceptionHandle</p>  
+	 * <p>Description: 业务执行异常处理</p>  
+	 * @param holder
+	 */
+	default void exceptionHandle(T holder, Exception ex) {
+		log.warn("默认空实现！");
+	};
+	
 }
