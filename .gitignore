@@ -16,3 +16,15 @@ luminroy-component-trace-spring-boot-starter/target/
 luminroy-component-feign/target/
 luminroy-component-hystrix/target/
 luminroy-component-trace-demo2/target/
+luminary-component-elasticsearch/target/
+luminary-component-elasticsearch-spring-boot-starter/target/
+luminary-component-feign/target/
+luminary-component-hystrix/target/
+luminary-component-logger/target/
+luminary-component-logger-demo/target/
+luminary-component-trace/target/
+luminary-component-trace-demo/target/
+luminary-component-trace-demo2/target/
+luminary-component-trace-spring-boot-starter/target/
+luminary-component-util/target/
+luminary-component-logger-spring-boot-starter/target/

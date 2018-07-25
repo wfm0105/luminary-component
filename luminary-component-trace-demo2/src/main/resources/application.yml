@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: trace-demo2-server
+
+luminary: 
+  elasticsearch:
+    username: elastic
+    password: 123456
+    server: 
+      - 127.0.0.1:9200
+    multiThreaded: true
+    maxTotalConnection: 20
+    maxTotalConnectionPerRoute: 5
+    discoveryEnabled: true
+    discorveryFrequency: 60
+    
+  trace: 
+    esIndex: trace-demo-${date} 
+    esType: demo
+    
+eureka: 
+  client: 
+    serviceUrl: 
+      defaultZone: http://127.0.0.1:1111/eureka/

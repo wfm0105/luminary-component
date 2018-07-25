@@ -4,22 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.luminroy.component</groupId>
-    <artifactId>luminroy-component</artifactId>
+    <groupId>com.luminary.component</groupId>
+    <artifactId>luminary-component</artifactId>
     <version>1.0.0</version>
     <modules>
-        <module>luminroy-component-util</module>
-        <module>luminory-component-elasticsearch</module>
-        <module>luminroy-component-logger</module>
-        <module>luminroy-component-logger-demo</module>
-        <module>luminroy-component-elasticsearch-spring-boot-starter</module>
-        <module>luminroy-component-logger-spring-boot-starter</module>
-        <module>luminroy-component-trace</module>
-        <module>luminroy-component-trace-spring-boot-starter</module>
-        <module>luminroy-component-trace-demo</module>
-        <module>luminroy-component-trace-demo2</module>
-        <module>luminroy-component-hystrix</module>
-        <module>luminroy-component-feign</module>
+        <module>luminary-component-util</module>
+        <module>luminary-component-elasticsearch</module>
+        <module>luminary-component-logger</module>
+        <module>luminary-component-logger-demo</module>
+        <module>luminary-component-elasticsearch-spring-boot-starter</module>
+        <module>luminary-component-logger-spring-boot-starter</module>
+        <module>luminary-component-trace</module>
+        <module>luminary-component-trace-spring-boot-starter</module>
+        <module>luminary-component-trace-demo</module>
+        <module>luminary-component-trace-demo2</module>
+        <module>luminary-component-hystrix</module>
+        <module>luminary-component-feign</module>
     </modules>
    
     <packaging>pom</packaging>
