@@ -16,6 +16,12 @@
   	</dependency>
   
   	<dependency>
+        <groupId>com.luminary.component</groupId>
+        <artifactId>luminary-component-logger-spring-boot-starter</artifactId>
+        <version>${self.version}</version>
+    </dependency>
+  
+  	<dependency>
   		<groupId>com.luminary.component</groupId>
   		<artifactId>luminary-component-trace-spring-boot-starter</artifactId>
   		<version>${self.version}</version>

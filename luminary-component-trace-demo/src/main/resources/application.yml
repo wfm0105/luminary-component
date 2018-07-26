@@ -19,7 +19,7 @@ luminary:
     
   trace: 
     esIndex: trace-demo-${date} 
-    esType: demo
+    esType: demo1
     
 eureka: 
   client: 

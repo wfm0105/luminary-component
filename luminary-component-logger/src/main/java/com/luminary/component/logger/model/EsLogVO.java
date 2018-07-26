@@ -12,25 +12,25 @@ import lombok.Data;
 @Data
 public class EsLogVO {
 
-    private String host;
-    private String ip;
-    private String profile;
-    private String message;
-    private long dateTime;
-    private String logger;
-    private String level;
-    private String thread;
-    private String throwable;
-    private Location location;
-    private String traceId;
-    private String rpcId;
+    private String host; // hostName
+    private String ip; // ip
+    private String profile; // 环境
+    private String message; // 日志信息
+    private long dateTime; // 日期
+    private String logger; // logback appender
+    private String level; // 级别
+    private String thread; // 线程
+    private String throwable; // 错误信息
+    private Location location; 
+    private String traceId; // 链路跟踪id
+    private String rpcId; // 链路中每步调用id
 
     @Data
     public static class Location {
-        private String className;
-        private String method;
-        private String file;
-        private String line;
+        private String className; // 类名
+        private String method; // 方法名
+        private String file; // 文件
+        private String line; // 行号
     }
 
 }

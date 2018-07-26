@@ -24,6 +24,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
@@ -43,6 +44,7 @@ import com.luminary.component.trace.tracker.GenericTracker;
 import com.luminary.component.trace.tracker.GenericTracker.TraceHolder;
 import com.luminary.component.trace.tracker.Tracker;
 import com.luminary.component.util.web.HostUtil;
+import com.netflix.loadbalancer.ILoadBalancer;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,6 +61,9 @@ public class FeignTracker extends GenericTracker implements Tracker<TraceHolder>
 	
 	@Value("${spring.profiles.active:default}")
 	private String profile;
+	
+	@Autowired
+    private LoadBalancerClient loadBalancer;
 	
 	@Autowired
 	private TraceClient traceClient;

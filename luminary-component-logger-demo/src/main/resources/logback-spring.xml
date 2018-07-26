@@ -2,7 +2,7 @@
 <configuration scan="true" scanPeriod="10 seconds">
 
 	<springProperty scope="context" name="profile" source="spring.profiles.active"
-					defaultValue="dev"/>
+					defaultValue="default"/>
 
 	<springProperty scope="context" name="esUserName" source="luminary.elasticsearch.username"
 					defaultValue="elastic"/>
