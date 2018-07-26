@@ -23,6 +23,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
@@ -55,6 +56,9 @@ import lombok.extern.slf4j.Slf4j;
 @Aspect
 @Component
 public class FeignTracker extends GenericTracker implements Tracker<TraceHolder> {
+	
+	@Value("${spring.profiles.active:default}")
+	private String profile;
 	
 	@Autowired
 	private TraceClient traceClient;
@@ -128,6 +132,7 @@ public class FeignTracker extends GenericTracker implements Tracker<TraceHolder>
 		    
 		    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		    
+		    traceHolder.setProfile(profile);
 			traceHolder.setServiceCategory("feign");
 			traceHolder.setServiceName(feignClient.name());
 			traceHolder.setMethodName(methodName);
@@ -139,6 +144,7 @@ public class FeignTracker extends GenericTracker implements Tracker<TraceHolder>
 			request.setAttribute(TraceInfo.TRACE_ID_KEY, traceHolder.getEntity().getTraceId());
 			request.setAttribute(TraceInfo.RPC_ID_KEY, traceHolder.getEntity().getRpcId());
 			result = joinPoint.proceed();
+			traceHolder.getEntity().setResponseInfo(result.toString());
 			postHandle(traceHolder);
 		
 		} catch (Exception e) {

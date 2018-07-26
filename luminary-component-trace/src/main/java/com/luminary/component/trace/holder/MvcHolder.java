@@ -22,6 +22,7 @@ import lombok.Data;
 @Data
 public class MvcHolder {
 
+	private String profile;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private Object handler;
