@@ -33,8 +33,8 @@ public class RpcTraceInfoVO {
 	private String serviceHost; // 服务主机名
 	private String methodName; // 方法名
 	private String requestDateTime; // 请求时间
-	private String requestJson; // 请求参数
-	private String responseJson; // 返回参数
+	private String requestParam; // 请求参数
+	private String responseInfo; // 返回结果
 	private String result; // 结果
 	private long runTime; // 调用耗时
 	private String profile; // 环境

@@ -67,7 +67,7 @@ public class RestTraceClient extends RestClient {
 		rpcTraceInfoVO.setServiceCategory("rest");
 		rpcTraceInfoVO.setServiceName(url);
 		rpcTraceInfoVO.setMethodName(httpMethod.name());
-		rpcTraceInfoVO.setRequestJson(gson.toJson(requestBody));
+		rpcTraceInfoVO.setRequestParam(gson.toJson(requestBody));
 		rpcTraceInfoVO.setServiceHost(url);
 		rpcTraceInfoVO.setClientHost(HostUtil.getIP(request));
 		
@@ -90,7 +90,7 @@ public class RestTraceClient extends RestClient {
 		Gson gson = new Gson();
 		
 		RpcTraceInfoVO rpcTraceInfoVO = (RpcTraceInfoVO) restHolder.getExtra();
-		rpcTraceInfoVO.setResponseJson(gson.toJson(rpcTraceInfoVO));
+		rpcTraceInfoVO.setResponseInfo(gson.toJson(rpcTraceInfoVO));
 		rpcTraceInfoVO.setRunTime(intevalTime);
 		rpcTraceInfoVO.setResult(RpcTraceInfoVO.RESULT_SUCCESS);
 		
@@ -113,7 +113,7 @@ public class RestTraceClient extends RestClient {
 		}
 		
 		RpcTraceInfoVO rpcTraceInfoVO = (RpcTraceInfoVO) restHolder.getExtra();
-		rpcTraceInfoVO.setResponseJson(sb.toString());
+		rpcTraceInfoVO.setResponseInfo(sb.toString());
 		rpcTraceInfoVO.setRunTime(intevalTime);
 		rpcTraceInfoVO.setResult(RpcTraceInfoVO.RESULT_FAILURE);
 		try {

@@ -31,10 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TraceInteceptor extends HandlerInterceptorAdapter {
 
+	private String profile;
+	
 	private Tracker<MvcHolder> tracker;
 	
-	public TraceInteceptor (Tracker<MvcHolder> tracker) {
+	public TraceInteceptor (String profile, Tracker<MvcHolder> tracker) {
 		super();
+		this.profile = profile;
 		this.tracker = tracker;
 	}
 	
@@ -49,6 +52,7 @@ public class TraceInteceptor extends HandlerInterceptorAdapter {
 		log.info("http preHandle");
 		if(isTraceHandler(handler)) {
 			MvcHolder mvcHolder = new MvcHolder();
+			mvcHolder.setProfile(profile);
 			mvcHolder.setRequest(request);
 			mvcHolder.setResponse(response);
 			mvcHolder.setHandler(handler);

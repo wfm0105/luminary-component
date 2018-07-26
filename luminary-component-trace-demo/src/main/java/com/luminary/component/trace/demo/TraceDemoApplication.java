@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luminary.component.feign.tracker.FeignTracker;
+import com.luminary.component.hystrix.tracker.HystrixTracker;
 import com.luminary.component.trace.annotation.Trace;
 import com.luminary.component.trace.client.TraceClient;
 import com.luminary.component.trace.demo.service.Service;
@@ -34,7 +35,7 @@ import com.luminary.component.trace.util.RestTraceClient;
 * @author wulinfeng
 * @date 2018年7月20日下午2:59:54
 */
-@Import(FeignTracker.class)
+@Import(value= {FeignTracker.class, HystrixTracker.class})
 @RestController
 @EnableFeignClients
 @EnableDiscoveryClient
@@ -87,12 +88,36 @@ public class TraceDemoApplication {
 	}
 	
 	@Trace(SpringMvcTracker.class)
+	@GetMapping("/server4")
+	public String server4(
+			HttpServletRequest request,
+			HttpServletResponse response) {
+		
+		String exception = null;
+		exception.getBytes();
+		return "hello world3！";
+		
+	}
+	
+	@Trace(SpringMvcTracker.class)
 	@GetMapping("/feignServer1")
 	public String feignServer1(
 			HttpServletRequest request,
 			HttpServletResponse response) {
 		
 		service.feignServer2();
+		service.feignServer3();
+		return "hello world！";
+		
+	}
+	
+	@Trace(SpringMvcTracker.class)
+	@GetMapping("/feignServer2")
+	public String feignServer2(
+			HttpServletRequest request,
+			HttpServletResponse response) {
+		
+		service.feignServer3();
 		return "hello world！";
 		
 	}

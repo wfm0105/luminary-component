@@ -11,6 +11,7 @@ package com.luminary.component.trace.config;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +41,9 @@ import lombok.extern.slf4j.Slf4j;
 @EnableConfigurationProperties(TraceProperties.class)
 public class SpringMvcTrackerAutoConfigure implements WebMvcConfigurer {
 
+	 @Value("${spring.profiles.active:default}")
+	 private String profile;
+	
 	 @Autowired
 	 private TraceProperties traceProperties;
 	 
@@ -67,7 +71,7 @@ public class SpringMvcTrackerAutoConfigure implements WebMvcConfigurer {
      public void addInterceptors(InterceptorRegistry registry) {
 		TraceInteceptor traceInteceptor;
 		try {
-			traceInteceptor = new TraceInteceptor(springMvcTracker());
+			traceInteceptor = new TraceInteceptor(profile, springMvcTracker());
 			registry.addInterceptor(traceInteceptor).addPathPatterns(traceProperties.getPathPatterns());
 		} catch (IOException e) {
 			log.error("trace拦截器设置失败！", e);

@@ -50,10 +50,18 @@ public class GenericTracker implements Tracker<TraceHolder> {
 		} else {
 			traceInfo.addSequenceNo();
 		}
+		
+		// 允许通过holder传递traceId和rpcId，比如基于hystrix的tracker实现
+		if(holder.getTraceId() != null)
+			traceInfo.setTraceId(holder.getTraceId());
+		if(holder.getRpcId() != null) 
+			traceInfo.setRpcId(holder.getRpcId());
+		
 		MDC.put(TraceInfo.TRACE_ID_KEY, traceInfo.getTraceId());
 		MDC.put(TraceInfo.RPC_ID_KEY, traceInfo.getRpcId());
 		
 		RpcTraceInfoVO rpcTraceInfoVO = new RpcTraceInfoVO();
+		rpcTraceInfoVO.setProfile(holder.getProfile());
 		rpcTraceInfoVO.setRequestDateTime(ISO_DATETIME_TIME_ZONE_FORMAT_WITH_MILLIS.format(Calendar.getInstance().getTime()));
 		rpcTraceInfoVO.setTraceId(traceInfo.getTraceId());
 		rpcTraceInfoVO.setRpcId(traceInfo.getRpcId());
@@ -61,7 +69,7 @@ public class GenericTracker implements Tracker<TraceHolder> {
 		rpcTraceInfoVO.setServiceCategory(holder.getServiceCategory());
 		rpcTraceInfoVO.setServiceName(holder.getServiceName());
 		rpcTraceInfoVO.setMethodName(holder.getMethodName());
-		rpcTraceInfoVO.setRequestJson(holder.getRequestJson());
+		rpcTraceInfoVO.setRequestParam(holder.getRequestJson());
 		rpcTraceInfoVO.setServiceHost(holder.getServiceHost());
 		rpcTraceInfoVO.setClientHost(holder.getClientHost());
 		
@@ -93,11 +101,7 @@ public class GenericTracker implements Tracker<TraceHolder> {
 			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-		} finally {
-			TraceContext.removeTraceInfo();
-			MDC.remove(TraceInfo.TRACE_ID_KEY);
-			MDC.remove(TraceInfo.RPC_ID_KEY);
-		}
+		} 
 		
 	};
 	
@@ -109,21 +113,23 @@ public class GenericTracker implements Tracker<TraceHolder> {
 			RpcTraceInfoVO rpcTraceInfoVO = holder.getEntity();
 			if(rpcTraceInfoVO != null) {
 				rpcTraceInfoVO.setResult(RpcTraceInfoVO.RESULT_FAILURE);
-				rpcTraceInfoVO.setResponseJson(ex.getMessage());
+				rpcTraceInfoVO.setResponseInfo(ex.getMessage());
+				Gson gson = new Gson();
+				log.debug(gson.toJson(rpcTraceInfoVO));
+				traceClient.sendTraceInfo(rpcTraceInfoVO);
 			}
 			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-		} finally {
-			TraceContext.removeTraceInfo();
-			MDC.remove(TraceInfo.TRACE_ID_KEY);
-			MDC.remove(TraceInfo.RPC_ID_KEY);
-		}
+		} 
 	}
 	
 	@Data
 	public static class TraceHolder {
 		private long startTime;
+		private String traceId;
+		private String rpcId;
+		private String profile;
 		private String serviceCategory;
 		private String serviceName;
 		private String methodName;

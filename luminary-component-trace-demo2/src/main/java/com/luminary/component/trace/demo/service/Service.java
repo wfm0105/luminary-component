@@ -4,7 +4,7 @@
 * <p>Copyright: Copyright (c) 2018-2099</p>  
 * <p>Company: </p>  
 * @author wulinfeng  
-* @date 2018年7月23日下午2:57:17  
+* @date 2018年7月26日上午11:10:28  
 */  
 package com.luminary.component.trace.demo.service;
 
@@ -20,17 +20,17 @@ import com.luminary.component.trace.demo.service.impl.ServiceImpl;
 * <p>Title: Service</p>  
 * <p>Description: </p>  
 * @author wulinfeng
-* @date 2018年7月23日下午2:57:17
+* @date 2018年7月26日上午11:10:28
 */
-@FeignClient(name="trace-demo2-server", fallback=ServiceImpl.class, configuration = LuminaryRequestInterceptor.class)
+@FeignClient(name="trace-demo-server", fallback=ServiceImpl.class, configuration = LuminaryRequestInterceptor.class)
 public interface Service {
+
+	@Trace(FeignTracker.class)
+	@GetMapping("/server3")
+	String server3();
 	
 	@Trace(FeignTracker.class)
-	@GetMapping("/feignServer2")
-	String feignServer2();
-	
-	@Trace(FeignTracker.class)
-	@GetMapping("/feignServer3")
-	String feignServer3();
+	@GetMapping("/server4")
+	String server4();
 	
 }

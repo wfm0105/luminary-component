@@ -53,7 +53,7 @@ public class MvcTracker implements Tracker<MvcHolder> {
 	
 	@Override
 	public void preHandle(MvcHolder holder) {
-		initTraceData(holder.getRequest(), holder.getHandler());
+		initTraceData(holder.getRequest(), holder.getHandler(), holder.getProfile());
 	}
 	
 	@Override
@@ -61,7 +61,7 @@ public class MvcTracker implements Tracker<MvcHolder> {
 		finishTraceData(holder.getRequest(), holder.getResponse(), holder.getException());
 	}
 	
-	private void initTraceData (HttpServletRequest request, Object handler) {
+	private void initTraceData (HttpServletRequest request, Object handler, String profile) {
 		// 开始时间
 		request.setAttribute(BEGIN_TIME_KEY, System.currentTimeMillis());
 		// 为当前线程设置上下文
@@ -99,6 +99,7 @@ public class MvcTracker implements Tracker<MvcHolder> {
 			 }
 			 
 			 RpcTraceInfoVO rpcTraceInfoVO = new RpcTraceInfoVO();
+			 rpcTraceInfoVO.setProfile(profile);
 			 rpcTraceInfoVO.setRequestDateTime(ISO_DATETIME_TIME_ZONE_FORMAT_WITH_MILLIS.format(Calendar.getInstance().getTime()));
 			 rpcTraceInfoVO.setTraceId(traceInfo.getTraceId());
 			 rpcTraceInfoVO.setRpcId(traceInfo.getRpcId());
@@ -106,7 +107,7 @@ public class MvcTracker implements Tracker<MvcHolder> {
 			 rpcTraceInfoVO.setServiceCategory("spring mvc");
 			 rpcTraceInfoVO.setServiceName(AopUtils.getTargetClass(handlerMethod.getBean().getClass()).getSimpleName());
 			 rpcTraceInfoVO.setMethodName(handlerMethod.getMethod().getName());
-			 rpcTraceInfoVO.setRequestJson(gson.toJson(request.getParameterMap()));
+			 rpcTraceInfoVO.setRequestParam(gson.toJson(request.getParameterMap()));
 			 rpcTraceInfoVO.setServiceHost(HostUtil.getIP()+":"+request.getLocalPort()+request.getServletPath());
 			 rpcTraceInfoVO.setClientHost(HostUtil.getIP(request));
 			 
@@ -135,7 +136,7 @@ public class MvcTracker implements Tracker<MvcHolder> {
 						rpcTraceInfoVO.setResult(RpcTraceInfoVO.RESULT_SUCCESS);
 					} else {
 						rpcTraceInfoVO.setResult(RpcTraceInfoVO.RESULT_FAILURE);
-						rpcTraceInfoVO.setResponseJson(ex.getMessage());
+						rpcTraceInfoVO.setResponseInfo(ex.getMessage());
 					}
 					Gson gson = new Gson();
 					log.debug(gson.toJson(rpcTraceInfoVO));
