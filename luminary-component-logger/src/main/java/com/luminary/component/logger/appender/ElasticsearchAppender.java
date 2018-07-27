@@ -58,6 +58,8 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> impl
 	@Setter
 	protected boolean isLocationInfo = true;	// 是否打印行号
 	@Setter
+	protected String applicationName = "";
+	@Setter
 	protected String profile = "";	// 运行环境
 	@Setter
 	protected String esAddress = ""; //	地址

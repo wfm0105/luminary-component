@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class EsLogVO {
 
+	private String applicationName; // applicationName
     private String host; // hostName
     private String ip; // ip
     private String profile; // 环境

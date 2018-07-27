@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="10 seconds">
 
+	<springProperty scope="context" name="applicationName" source="spring.application.name"
+					defaultValue=""/>
 	<springProperty scope="context" name="profile" source="spring.profiles.active"
 					defaultValue="default"/>
 
@@ -46,6 +48,7 @@
 	</appender>
 
 	<appender name="ES" class="com.luminary.component.logger.appender.SpringElasticsearchAppender">
+		<applicationName>${applicationName}</applicationName>
 		<profile>${profile}</profile>
 		<esType>demo</esType>
 		<username>${esUserName}</username>
