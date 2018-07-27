@@ -16,7 +16,7 @@ public class EsLogVO {
     private String ip; // ip
     private String profile; // 环境
     private String message; // 日志信息
-    private long dateTime; // 日期
+    private String dateTime; // 日期
     private String logger; // logback appender
     private String level; // 级别
     private String thread; // 线程

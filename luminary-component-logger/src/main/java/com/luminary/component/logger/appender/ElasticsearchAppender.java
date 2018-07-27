@@ -44,6 +44,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> implements LuminaryLoggerAppender<E> {
 
+	private static final DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+	
 	protected JestClient jestClient;
 
 	private static final String CONFIG_PROPERTIES_NAME = "es.properties";
@@ -123,8 +125,7 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> impl
 		Gson gson = new Gson();
 		String jsonString = gson.toString();
 
-		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String esIndexFormat = esIndex.replace("#date#", sdf.format(Calendar.getInstance().getTime()));
+		String esIndexFormat = esIndex.replace("#date#", SIMPLE_DATE_FORMAT.format(Calendar.getInstance().getTime()));
 		Index index = new Index.Builder(esLogVO).index(esIndexFormat).type(esType).build();
 
 		try {
@@ -149,7 +150,7 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> impl
 
 		// 获得时间
 		long dateTime = getDateTime(event);
-		esLogVO.setDateTime(dateTime);
+		esLogVO.setDateTime(SIMPLE_DATE_FORMAT.format(Calendar.getInstance().getTime()));
 
 		// 获得线程
 		String threadName = getThead(event);
