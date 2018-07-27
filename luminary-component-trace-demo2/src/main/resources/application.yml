@@ -15,7 +15,7 @@ luminary:
     discorveryFrequency: 60
     
   trace: 
-    esIndex: trace-demo-${date} 
+    esIndex: trace-${date} 
     esType: demo2
     
 eureka: 
