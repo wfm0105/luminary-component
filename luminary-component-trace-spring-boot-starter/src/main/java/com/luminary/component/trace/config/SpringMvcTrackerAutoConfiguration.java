@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 @EnableConfigurationProperties(TraceProperties.class)
-public class SpringMvcTrackerAutoConfigure implements WebMvcConfigurer {
+public class SpringMvcTrackerAutoConfiguration implements WebMvcConfigurer {
 
 	 @Value("${spring.profiles.active:default}")
 	 private String profile;

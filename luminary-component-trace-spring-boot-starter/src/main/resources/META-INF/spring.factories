@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.luminary.component.trace.config.SpringMvcTrackerAutoConfigure
+com.luminary.component.trace.config.SpringMvcTrackerAutoConfiguration

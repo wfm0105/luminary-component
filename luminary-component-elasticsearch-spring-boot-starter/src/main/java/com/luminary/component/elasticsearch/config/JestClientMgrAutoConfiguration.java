@@ -14,7 +14,7 @@ import com.luminary.component.elasticsearch.properties.ElasticsearchProperties;
 @Configuration
 @ConditionalOnClass(JestClientMgr.class)
 @EnableConfigurationProperties(ElasticsearchProperties.class)
-public class JestClientMgrAutoConfigure {
+public class JestClientMgrAutoConfiguration {
 
     @Autowired
     private ElasticsearchProperties elasticsearchProperties;
