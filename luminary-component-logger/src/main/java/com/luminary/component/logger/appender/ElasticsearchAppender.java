@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.lang3.time.FastDateFormat;
+
 import com.google.gson.Gson;
 import com.luminary.component.elasticsearch.JestClientMgr;
 import com.luminary.component.logger.model.EsLogVO;
@@ -44,7 +46,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> implements LuminaryLoggerAppender<E> {
 
-	private static final DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+	private static final FastDateFormat SIMPLE_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd");
+	
+	private static final FastDateFormat ISO_DATETIME_TIME_ZONE_FORMAT_WITH_MILLIS = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
 	
 	protected JestClient jestClient;
 
@@ -127,7 +131,7 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> impl
 		Gson gson = new Gson();
 		String jsonString = gson.toString();
 
-		String esIndexFormat = esIndex.replace("#date#", SIMPLE_DATE_FORMAT.format(Calendar.getInstance().getTime()));
+		String esIndexFormat = esIndex.replace("#date#", SIMPLE_FORMAT.format(Calendar.getInstance().getTime()));
 		Index index = new Index.Builder(esLogVO).index(esIndexFormat).type(esType).build();
 
 		try {
@@ -141,6 +145,9 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> impl
 	private EsLogVO createData(LoggingEvent event) {
 		EsLogVO esLogVO = new EsLogVO();
 
+		// 获得applicationName
+		esLogVO.setApplicationName(applicationName);
+		
 		// 获得profile
 		esLogVO.setProfile(profile);
 		
@@ -152,7 +159,7 @@ public class ElasticsearchAppender<E> extends UnsynchronizedAppenderBase<E> impl
 
 		// 获得时间
 		long dateTime = getDateTime(event);
-		esLogVO.setDateTime(SIMPLE_DATE_FORMAT.format(Calendar.getInstance().getTime()));
+		esLogVO.setDateTime(ISO_DATETIME_TIME_ZONE_FORMAT_WITH_MILLIS.format(Calendar.getInstance().getTime()));
 
 		// 获得线程
 		String threadName = getThead(event);
