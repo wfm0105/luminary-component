@@ -24,7 +24,7 @@ import com.netflix.loadbalancer.ZoneAvoidanceRule;
 
 /**  
 * <p>Title: LuminaryRibbonConfig</p>  
-* <p>Description: </p>  
+* <p>Description: 使用LuminaryRibbonRule</p>  
 * @author wulinfeng
 * @date 2018年7月27日下午3:18:10
 */

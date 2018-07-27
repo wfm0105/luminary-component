@@ -14,7 +14,7 @@ import lombok.Data;
 
 /**  
 * <p>Title: ServerEvent</p>  
-* <p>Description: </p>  
+* <p>Description: 负载均衡时，服务相关事件</p>  
 * @author wulinfeng
 * @date 2018年7月27日下午3:35:32
 */

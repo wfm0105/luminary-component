@@ -13,7 +13,7 @@ import com.luminary.component.ribbon.listener.ServerListener;
 
 /**  
 * <p>Title: ServerPublisher</p>  
-* <p>Description: </p>  
+* <p>Description: 负载均衡时，事件通知者</p>  
 * @author wulinfeng
 * @date 2018年7月27日下午3:48:18
 */

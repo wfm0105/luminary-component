@@ -1,5 +1,5 @@
 /**  
-* <p>Title: TestRule.java</p>  
+* <p>Title: LuminaryRibbonRule.java</p>  
 * <p>Description: </p>  
 * <p>Copyright: Copyright (c) 2018-2099</p>  
 * <p>Company: </p>  
@@ -20,8 +20,8 @@ import com.netflix.loadbalancer.ZoneAvoidanceRule;
 import lombok.extern.slf4j.Slf4j;
 
 /**  
-* <p>Title: TestRule</p>  
-* <p>Description: </p>  
+* <p>Title: LuminaryRibbonRule</p>  
+* <p>Description: 在ZoneAvoidanceRule基础上增加监听</p>  
 * @author wulinfeng
 * @date 2018年7月27日下午2:52:02
 */

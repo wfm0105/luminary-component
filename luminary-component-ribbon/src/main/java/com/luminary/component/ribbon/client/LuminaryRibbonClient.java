@@ -14,7 +14,7 @@ import com.luminary.component.ribbon.config.LuminaryRibbonConfiguration;
 
 /**  
 * <p>Title: LuminaryRibbonClient</p>  
-* <p>Description: </p>  
+* <p>Description: 使用LuminaryRibbonConfiguration配置的ribbonClient</p>  
 * @author wulinfeng
 * @date 2018年7月27日下午3:17:51
 */

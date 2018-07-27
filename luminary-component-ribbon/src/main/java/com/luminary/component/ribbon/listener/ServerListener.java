@@ -12,12 +12,18 @@ import com.luminary.component.ribbon.event.ServerEvent;
 
 /**  
 * <p>Title: ServerListener</p>  
-* <p>Description: </p>  
+* <p>Description: 负载均衡时，服务事件监听者</p>  
 * @author wulinfeng
 * @date 2018年7月27日下午3:44:40
 */
 public interface ServerListener {
 
+	/**
+	 * 
+	 * <p>Title: chooseServer</p>  
+	 * <p>Description: 选择服务事件监听逻辑</p>  
+	 * @param serverEvent
+	 */
 	void chooseServer(ServerEvent serverEvent);
 	
 }
