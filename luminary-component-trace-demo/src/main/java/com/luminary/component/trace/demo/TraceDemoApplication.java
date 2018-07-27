@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.luminary.component.feign.tracker.FeignTracker;
 import com.luminary.component.hystrix.tracker.HystrixTracker;
+import com.luminary.component.ribbon.client.LuminaryRibbonClient;
 import com.luminary.component.trace.annotation.Trace;
 import com.luminary.component.trace.client.TraceClient;
 import com.luminary.component.trace.demo.service.Service;
@@ -35,7 +36,7 @@ import com.luminary.component.trace.util.RestTraceClient;
 * @author wulinfeng
 * @date 2018年7月20日下午2:59:54
 */
-@Import(value= {FeignTracker.class, HystrixTracker.class})
+@Import(value= {FeignTracker.class, HystrixTracker.class, LuminaryRibbonClient.class})
 @RestController
 @EnableFeignClients
 @EnableDiscoveryClient

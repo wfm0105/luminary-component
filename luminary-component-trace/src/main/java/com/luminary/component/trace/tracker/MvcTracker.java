@@ -105,7 +105,7 @@ public class MvcTracker implements Tracker<MvcHolder> {
 			 rpcTraceInfoVO.setRpcId(traceInfo.getRpcId());
 			 rpcTraceInfoVO.setRpcType(RpcTypeEnum.HTTP.name());
 			 rpcTraceInfoVO.setServiceCategory("spring mvc");
-			 rpcTraceInfoVO.setServiceName(AopUtils.getTargetClass(handlerMethod.getBean().getClass()).getSimpleName());
+			 rpcTraceInfoVO.setServiceName(handlerMethod.getBean().getClass().getName().split("\\$\\$")[0]);
 			 rpcTraceInfoVO.setMethodName(handlerMethod.getMethod().getName());
 			 rpcTraceInfoVO.setRequestParam(gson.toJson(request.getParameterMap()));
 			 rpcTraceInfoVO.setServiceHost(HostUtil.getIP()+":"+request.getLocalPort()+request.getServletPath());

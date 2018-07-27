@@ -132,10 +132,10 @@ public class HystrixTracker extends GenericTracker implements Tracker<TraceHolde
 		    
 		    traceHolder.setProfile(profile);
 			traceHolder.setServiceCategory("hystrix");
-			traceHolder.setServiceName("same to up level");
+			traceHolder.setServiceName("");
 			traceHolder.setMethodName(methodName);
 			traceHolder.setRequestJson(gson.toJson(requestMap));
-			traceHolder.setServiceHost("same to up level");
+			traceHolder.setServiceHost("");
 			traceHolder.setClientHost(HostUtil.getIP(request));
 			
 			Optional.ofNullable(

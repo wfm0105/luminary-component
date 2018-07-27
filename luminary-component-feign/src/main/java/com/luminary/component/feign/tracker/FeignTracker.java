@@ -37,6 +37,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.google.gson.Gson;
+import com.luminary.component.feign.model.FeignTraceHolder;
+import com.luminary.component.ribbon.rule.LuminaryRibbonRule;
 import com.luminary.component.trace.annotation.Trace;
 import com.luminary.component.trace.client.TraceClient;
 import com.luminary.component.trace.model.TraceInfo;
@@ -44,7 +46,6 @@ import com.luminary.component.trace.tracker.GenericTracker;
 import com.luminary.component.trace.tracker.GenericTracker.TraceHolder;
 import com.luminary.component.trace.tracker.Tracker;
 import com.luminary.component.util.web.HostUtil;
-import com.netflix.loadbalancer.ILoadBalancer;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -85,7 +86,7 @@ public class FeignTracker extends GenericTracker implements Tracker<TraceHolder>
 			return joinPoint.proceed();
 		}
 		
-		TraceHolder traceHolder = new TraceHolder();
+		FeignTraceHolder traceHolder = new FeignTraceHolder();
 		Object result = null;
 		
 		try {
@@ -142,8 +143,10 @@ public class FeignTracker extends GenericTracker implements Tracker<TraceHolder>
 			traceHolder.setServiceName(feignClient.name());
 			traceHolder.setMethodName(methodName);
 			traceHolder.setRequestJson(gson.toJson(requestMap));
-			traceHolder.setServiceHost(feignClient.name());
+			traceHolder.setServiceHost("");
 			traceHolder.setClientHost(HostUtil.getIP(request));
+			
+			LuminaryRibbonRule.regist(traceHolder);
 			
 			preHandle(traceHolder);
 			request.setAttribute(TraceInfo.TRACE_ID_KEY, traceHolder.getEntity().getTraceId());

@@ -20,6 +20,7 @@
         <module>luminary-component-trace-demo2</module>
         <module>luminary-component-hystrix</module>
         <module>luminary-component-feign</module>
+        <module>luminary-component-ribbon</module>
     </modules>
    
     <packaging>pom</packaging>

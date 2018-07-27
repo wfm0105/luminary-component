@@ -5,31 +5,20 @@
     <artifactId>luminary-component</artifactId>
     <version>1.0.0</version>
   </parent>
-  <artifactId>luminary-component-feign</artifactId>
+  <artifactId>luminary-component-ribbon</artifactId>
   
   <dependencies>
-  	
-  	<dependency>
-  		<groupId>com.luminary.component</groupId>
-  		<artifactId>luminary-component-trace</artifactId>
-  		<version>${self.version}</version>
-  	</dependency>
-  	
-  	<dependency>
-  		<groupId>com.luminary.component</groupId>
-  		<artifactId>luminary-component-ribbon</artifactId>
-  		<version>${self.version}</version>
-  	</dependency>
   
-  	<dependency>
+     <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-openfeign</artifactId>
     </dependency>
     
     <dependency>
-  		<groupId>org.springframework.boot</groupId>
-  		<artifactId>spring-boot-starter-web</artifactId>
-  	</dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+    </dependency>
+  
   </dependencies>
   
   <build>
