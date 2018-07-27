@@ -18,9 +18,9 @@
         <module>luminary-component-trace-spring-boot-starter</module>
         <module>luminary-component-trace-demo</module>
         <module>luminary-component-trace-demo2</module>
-        <module>luminary-component-hystrix</module>
-        <module>luminary-component-feign</module>
-        <module>luminary-component-ribbon</module>
+        <module>luminary-component-hystrix-spring-cloud-starter</module>
+        <module>luminary-component-feign-spring-cloud-starter</module>
+        <module>luminary-component-ribbon-spring-cloud-starter</module>
     </modules>
    
     <packaging>pom</packaging>

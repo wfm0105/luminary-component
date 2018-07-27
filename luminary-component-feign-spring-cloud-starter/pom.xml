@@ -5,7 +5,7 @@
     <artifactId>luminary-component</artifactId>
     <version>1.0.0</version>
   </parent>
-  <artifactId>luminary-component-feign</artifactId>
+  <artifactId>luminary-component-feign-spring-cloud-starter</artifactId>
   
   <dependencies>
   	
@@ -17,7 +17,7 @@
   	
   	<dependency>
   		<groupId>com.luminary.component</groupId>
-  		<artifactId>luminary-component-ribbon</artifactId>
+  		<artifactId>luminary-component-ribbon-spring-cloud-starter</artifactId>
   		<version>${self.version}</version>
   	</dependency>
   

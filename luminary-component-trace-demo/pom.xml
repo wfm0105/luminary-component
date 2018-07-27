@@ -29,19 +29,19 @@
   	
   	<dependency>
   		<groupId>com.luminary.component</groupId>
-  		<artifactId>luminary-component-feign</artifactId>
+  		<artifactId>luminary-component-feign-spring-cloud-starter</artifactId>
   		<version>${self.version}</version>
   	</dependency>
   	
   	<dependency>
 	  	<groupId>com.luminary.component</groupId>
-	    <artifactId>luminary-component-hystrix</artifactId>
+	    <artifactId>luminary-component-hystrix-spring-cloud-starter</artifactId>
 	    <version>${self.version}</version>
 	</dependency>
 	
 	<dependency>
   		<groupId>com.luminary.component</groupId>
-  		<artifactId>luminary-component-ribbon</artifactId>
+  		<artifactId>luminary-component-ribbon-spring-cloud-starter</artifactId>
   		<version>${self.version}</version>
   	</dependency>
   	
