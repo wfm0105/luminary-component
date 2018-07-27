@@ -87,7 +87,7 @@
             }
           }
         },
-        "dataTime": {
+        "dateTime": {
           "type": "date"
         },
         "traceId": {
