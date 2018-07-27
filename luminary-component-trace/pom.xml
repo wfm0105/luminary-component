@@ -7,6 +7,10 @@
   </parent>
   <artifactId>luminary-component-trace</artifactId>
   
+  <properties>
+        <mybatis.version>3.4.6</mybatis.version>
+  </properties>
+  
   <dependencies>
   
   	<dependency>
@@ -20,6 +24,18 @@
   		<artifactId>luminary-component-elasticsearch</artifactId>
   		<version>${self.version}</version>
   	</dependency>
+  	
+  	<dependency>
+	    <groupId>org.mybatis</groupId>
+	    <artifactId>mybatis</artifactId>
+	    <version>${mybatis.version}</version>
+	    <scope>provide</scope>
+	</dependency>
+
+	<dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+    </dependency>
 
   	<dependency>
   		<groupId>javax.servlet</groupId>
