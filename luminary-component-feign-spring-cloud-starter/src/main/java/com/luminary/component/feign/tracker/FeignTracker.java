@@ -24,7 +24,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
@@ -41,7 +40,9 @@ import com.luminary.component.feign.model.FeignTraceHolder;
 import com.luminary.component.ribbon.rule.LuminaryRibbonRule;
 import com.luminary.component.trace.annotation.Trace;
 import com.luminary.component.trace.client.TraceClient;
+import com.luminary.component.trace.model.RpcTraceInfoVO;
 import com.luminary.component.trace.model.TraceInfo;
+import com.luminary.component.trace.thread.TraceContext;
 import com.luminary.component.trace.tracker.GenericTracker;
 import com.luminary.component.trace.tracker.GenericTracker.TraceHolder;
 import com.luminary.component.trace.tracker.Tracker;
@@ -62,9 +63,6 @@ public class FeignTracker extends GenericTracker implements Tracker<TraceHolder>
 	
 	@Value("${spring.profiles.active:default}")
 	private String profile;
-	
-	@Autowired
-    private LoadBalancerClient loadBalancer;
 	
 	@Autowired
 	private TraceClient traceClient;
@@ -95,7 +93,6 @@ public class FeignTracker extends GenericTracker implements Tracker<TraceHolder>
 			
 			Gson gson = new Gson();
 			
-			String targetName = joinPoint.getTarget().getClass().getName();
 			Signature signature = joinPoint.getSignature();
 		    MethodSignature methodSignature = (MethodSignature) signature;
 		    Method method = methodSignature.getMethod();
@@ -143,7 +140,7 @@ public class FeignTracker extends GenericTracker implements Tracker<TraceHolder>
 			traceHolder.setServiceName(feignClient.name());
 			traceHolder.setMethodName(methodName);
 			traceHolder.setRequestJson(gson.toJson(requestMap));
-			traceHolder.setServiceHost("");
+			traceHolder.setServiceHost(serverHost);
 			traceHolder.setClientHost(HostUtil.getIP(request));
 			
 			LuminaryRibbonRule.regist(traceHolder);

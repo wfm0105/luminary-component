@@ -82,6 +82,12 @@ public class MvcTracker implements Tracker<MvcHolder> {
 			traceInfo.setRpcId(rpcId);
 		});
 		
+		if(traceIdFromHeader != null) {
+			traceInfo.setRootRpcId(traceInfo.getRpcId());
+		} else {
+			traceInfo.setRootRpcId(TraceInfo.RE_ORIGINAL_ROOT_RPC_ID);
+		}
+		
 		// 封装链路跟踪数据
 		if(handler != null && handler instanceof HandlerMethod && traceIdFromHeader == null) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -115,7 +121,7 @@ public class MvcTracker implements Tracker<MvcHolder> {
 		}
 		
 		// 增加层级
-		traceInfo.addHierarchy();
+		//traceInfo.addHierarchy();
 		
 		// 链路跟踪信息保存到当前线程上下文中
 		TraceContext.putTraceInfo(traceInfo);

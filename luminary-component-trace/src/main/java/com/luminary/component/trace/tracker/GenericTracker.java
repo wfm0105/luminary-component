@@ -9,6 +9,7 @@
 package com.luminary.component.trace.tracker;
 
 import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.slf4j.MDC;
@@ -48,7 +49,34 @@ public class GenericTracker implements Tracker<TraceHolder> {
 		if(traceInfo == null) {
 			traceInfo = new TraceInfo();
 		} else {
-			traceInfo.addSequenceNo();
+			
+			int level = 1;
+			if(TraceInfo.ORIGINAL_ROOT_RPC_ID.equals(traceInfo.getRpcId())) {
+				// 第一次入栈的处理逻辑
+				traceInfo.addHierarchy();
+				int maxSequenceNo = traceInfo.getHierarchyMaxSeqNo(level);
+				traceInfo.setSequenceNo(new AtomicInteger(maxSequenceNo+1));
+			}
+			else if(TraceInfo.RE_ORIGINAL_ROOT_RPC_ID.equals(traceInfo.getRpcId())) {
+				// 出栈到第一层的处理逻辑
+				int maxSequenceNo = traceInfo.getHierarchyMaxSeqNo(level);
+				traceInfo.setSequenceNo(new AtomicInteger(maxSequenceNo+1));
+			} 
+			else if(traceInfo.getRootRpcId().equals(traceInfo.getRpcId())) {
+				// 跨线程后第一次入栈的处理逻辑
+				traceInfo.addHierarchy();
+				level = traceInfo.getRpcId().split("[.]").length-1;
+				int maxSequenceNo = traceInfo.getHierarchyMaxSeqNo(level);
+				traceInfo.setSequenceNo(new AtomicInteger(maxSequenceNo+1));
+			} 
+			else {
+				// 普通情况的处理逻辑
+				traceInfo.addHierarchy();
+				level = traceInfo.getRpcId().split("[.]").length-1;
+				int maxSequenceNo = traceInfo.getHierarchyMaxSeqNo(level);
+				traceInfo.setSequenceNo(new AtomicInteger(maxSequenceNo+1));
+			}
+			
 		}
 		
 		// 允许通过holder传递traceId和rpcId，比如基于hystrix的tracker实现
@@ -56,6 +84,10 @@ public class GenericTracker implements Tracker<TraceHolder> {
 			traceInfo.setTraceId(holder.getTraceId());
 		if(holder.getRpcId() != null) 
 			traceInfo.setRpcId(holder.getRpcId());
+		
+		traceInfo.cache();
+		
+		TraceContext.putTraceInfo(traceInfo);
 		
 		MDC.put(TraceInfo.TRACE_ID_KEY, traceInfo.getTraceId());
 		MDC.put(TraceInfo.RPC_ID_KEY, traceInfo.getRpcId());
@@ -83,6 +115,7 @@ public class GenericTracker implements Tracker<TraceHolder> {
 	public void postHandle(TraceHolder holder) {
 		
 		try {
+			
 			RpcTraceInfoVO rpcTraceInfoVO = holder.getEntity();
 			if(rpcTraceInfoVO != null) {
 				
@@ -91,12 +124,17 @@ public class GenericTracker implements Tracker<TraceHolder> {
 					return;
 				
 				rpcTraceInfoVO.setRunTime(System.currentTimeMillis() - holder.getStartTime());
+				rpcTraceInfoVO.setResult(RpcTraceInfoVO.RESULT_SUCCESS);
 				
 				Gson gson = new Gson();
 				log.debug(gson.toJson(rpcTraceInfoVO));
 				traceClient.sendTraceInfo(rpcTraceInfoVO);
 				
-				rpcTraceInfoVO.setResult(RpcTraceInfoVO.RESULT_SUCCESS);
+				TraceInfo traceInfo = TraceContext.getTraceInfo();
+				traceInfo.subHierarchy();
+				
+				TraceContext.putTraceInfo(traceInfo);
+				
 			}
 			
 		} catch (Exception e) {
@@ -117,6 +155,12 @@ public class GenericTracker implements Tracker<TraceHolder> {
 				Gson gson = new Gson();
 				log.debug(gson.toJson(rpcTraceInfoVO));
 				traceClient.sendTraceInfo(rpcTraceInfoVO);
+				
+				TraceInfo traceInfo = TraceContext.getTraceInfo();
+				traceInfo.subHierarchy();
+				
+				TraceContext.putTraceInfo(traceInfo);
+				
 			}
 			
 		} catch (Exception e) {

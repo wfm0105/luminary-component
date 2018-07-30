@@ -39,6 +39,7 @@ import com.google.gson.Gson;
 import com.luminary.component.trace.annotation.Trace;
 import com.luminary.component.trace.client.TraceClient;
 import com.luminary.component.trace.model.TraceInfo;
+import com.luminary.component.trace.thread.TraceContext;
 import com.luminary.component.trace.tracker.GenericTracker;
 import com.luminary.component.trace.tracker.GenericTracker.TraceHolder;
 import com.luminary.component.trace.tracker.Tracker;
@@ -149,6 +150,8 @@ public class HystrixTracker extends GenericTracker implements Tracker<TraceHolde
 			).ifPresent(rpcId -> {
 				traceHolder.setRpcId(((String) rpcId)+".1"); 
 			});
+			
+			TraceContext.init();
 			
 			preHandle(traceHolder);
 			request.setAttribute(TraceInfo.TRACE_ID_KEY, traceHolder.getEntity().getTraceId());
