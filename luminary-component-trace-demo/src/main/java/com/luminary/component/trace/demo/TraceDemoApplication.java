@@ -27,6 +27,7 @@ import com.luminary.component.ribbon.client.LuminaryRibbonClient;
 import com.luminary.component.trace.annotation.Trace;
 import com.luminary.component.trace.client.TraceClient;
 import com.luminary.component.trace.demo.service.Service;
+import com.luminary.component.trace.demo.service.TestService;
 import com.luminary.component.trace.tracker.SpringMvcTracker;
 import com.luminary.component.trace.util.RestTraceClient;
 
@@ -48,6 +49,9 @@ public class TraceDemoApplication {
 	
 	@Autowired
 	private Service service;
+	
+	@Autowired
+	private TestService testService;
 	
 	public static void main(String[] args) {
         SpringApplication.run(TraceDemoApplication.class, args);
@@ -119,6 +123,18 @@ public class TraceDemoApplication {
 			HttpServletResponse response) {
 		
 		service.feignServer3();
+		return "hello world！";
+		
+	}
+	
+	@Trace(SpringMvcTracker.class)
+	@GetMapping("/feignMybatisServer1")
+	public String feignMybatisServer1(
+			HttpServletRequest request,
+			HttpServletResponse response) {
+		
+		testService.get();
+		//service.feignServer3();
 		return "hello world！";
 		
 	}

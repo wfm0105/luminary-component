@@ -13,10 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.plugin.Interceptor;
@@ -24,12 +21,9 @@ import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.google.gson.Gson;
 import com.luminary.component.trace.client.TraceClient;
-import com.luminary.component.trace.model.TraceInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 * @date 2018年7月27日下午5:14:39
 */
 @Slf4j
-@Intercepts({@Signature(type=StatementHandler.class,method="prepare",args={Connection.class})})
+@Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class })})
 public class MybatisTracker extends GenericTracker implements Interceptor {
 
 	private String profile;
@@ -70,6 +64,8 @@ public class MybatisTracker extends GenericTracker implements Interceptor {
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		
+		log.info("mybatis tracker");
+		
 		TraceHolder traceHolder = new TraceHolder();
 		Object result = null;
 		
@@ -87,25 +83,11 @@ public class MybatisTracker extends GenericTracker implements Interceptor {
 		    
 		    requestMap.put("params", requestList);
 		    
-		    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-			
 			traceHolder.setProfile(profile);
 			traceHolder.setServiceCategory("mybatis");
 			traceHolder.setServiceName(invocation.getTarget().getClass().getName());
 			traceHolder.setMethodName(invocation.getMethod().getName());
 			traceHolder.setRequestJson(gson.toJson(requestMap));
-			
-			Optional.ofNullable(
-					request.getAttribute(TraceInfo.TRACE_ID_KEY)
-			).ifPresent(traceId -> {
-				traceHolder.setTraceId((String) traceId); 
-			});
-			
-			Optional.ofNullable(
-					request.getAttribute(TraceInfo.RPC_ID_KEY)
-			).ifPresent(rpcId -> {
-				traceHolder.setRpcId(((String) rpcId)+".1"); 
-			});
 			
 			preHandle(traceHolder);
 			result = invocation.proceed();
