@@ -38,6 +38,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.google.gson.Gson;
 import com.luminary.component.trace.annotation.Trace;
 import com.luminary.component.trace.client.TraceClient;
+import com.luminary.component.trace.model.RpcTypeEnum;
 import com.luminary.component.trace.model.TraceInfo;
 import com.luminary.component.trace.thread.TraceContext;
 import com.luminary.component.trace.tracker.GenericTracker;
@@ -132,10 +133,11 @@ public class HystrixTracker extends GenericTracker implements Tracker<TraceHolde
 		    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		    
 		    traceHolder.setProfile(profile);
+		    traceHolder.setRpcType(RpcTypeEnum.HTTP.name());
 			traceHolder.setServiceCategory("hystrix");
 			traceHolder.setServiceName("");
 			traceHolder.setMethodName(methodName);
-			traceHolder.setRequestJson(gson.toJson(requestMap));
+			traceHolder.setRequestParam(gson.toJson(requestMap));
 			traceHolder.setServiceHost("");
 			traceHolder.setClientHost(HostUtil.getIP(request));
 			
@@ -154,6 +156,11 @@ public class HystrixTracker extends GenericTracker implements Tracker<TraceHolde
 			TraceContext.init();
 			
 			preHandle(traceHolder);
+			
+			TraceInfo traceInfo = TraceContext.getTraceInfo();
+			traceInfo.setRootRpcId(traceHolder.getRpcId());
+			TraceContext.putContext(traceHolder.getTraceId(), traceInfo);
+			
 			request.setAttribute(TraceInfo.TRACE_ID_KEY, traceHolder.getEntity().getTraceId());
 			request.setAttribute(TraceInfo.RPC_ID_KEY, traceHolder.getEntity().getRpcId());
 			result = joinPoint.proceed();

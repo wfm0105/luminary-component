@@ -41,6 +41,7 @@ import com.luminary.component.ribbon.rule.LuminaryRibbonRule;
 import com.luminary.component.trace.annotation.Trace;
 import com.luminary.component.trace.client.TraceClient;
 import com.luminary.component.trace.model.RpcTraceInfoVO;
+import com.luminary.component.trace.model.RpcTypeEnum;
 import com.luminary.component.trace.model.TraceInfo;
 import com.luminary.component.trace.thread.TraceContext;
 import com.luminary.component.trace.tracker.GenericTracker;
@@ -136,10 +137,11 @@ public class FeignTracker extends GenericTracker implements Tracker<TraceHolder>
 		    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		    
 		    traceHolder.setProfile(profile);
+		    traceHolder.setRpcType(RpcTypeEnum.HTTP.name());
 			traceHolder.setServiceCategory("feign");
 			traceHolder.setServiceName(feignClient.name());
 			traceHolder.setMethodName(methodName);
-			traceHolder.setRequestJson(gson.toJson(requestMap));
+			traceHolder.setRequestParam(gson.toJson(requestMap));
 			traceHolder.setServiceHost(serverHost);
 			traceHolder.setClientHost(HostUtil.getIP(request));
 			
