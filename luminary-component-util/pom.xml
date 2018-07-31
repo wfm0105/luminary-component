@@ -21,18 +21,21 @@
             <groupId>org.jeecg</groupId>
             <artifactId>easypoi-base</artifactId>
             <version>${easypoi.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.jeecg</groupId>
             <artifactId>easypoi-web</artifactId>
             <version>${easypoi.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.jeecg</groupId>
             <artifactId>easypoi-annotation</artifactId>
             <version>${easypoi.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -45,6 +48,17 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
+
+	  	<dependency>
+		    <groupId>redis.clients</groupId>
+		    <artifactId>jedis</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		</dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>

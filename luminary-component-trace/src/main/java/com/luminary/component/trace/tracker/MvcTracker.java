@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.slf4j.MDC;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.web.method.HandlerMethod;
 
 import com.google.gson.Gson;

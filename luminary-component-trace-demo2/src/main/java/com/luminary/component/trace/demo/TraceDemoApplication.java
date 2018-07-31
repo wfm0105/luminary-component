@@ -17,7 +17,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +26,6 @@ import com.luminary.component.trace.annotation.Trace;
 import com.luminary.component.trace.client.TraceClient;
 import com.luminary.component.trace.demo.service.Service;
 import com.luminary.component.trace.tracker.SpringMvcTracker;
-import com.luminary.component.trace.util.RestTraceClient;
 
 /**  
 * <p>Title: TraceDemo</p>  
@@ -51,24 +49,6 @@ public class TraceDemoApplication {
 	public static void main(String[] args) {
         SpringApplication.run(TraceDemoApplication.class, args);
     }
-	
-	@Trace(SpringMvcTracker.class)
-	@GetMapping("/server2")
-	public String server1(
-			HttpServletRequest request,
-			HttpServletResponse response) {
-		
-		RestTraceClient restClient = new RestTraceClient(traceClient);
-		
-		restClient.request(
-				"http://127.0.0.1:8088/server3", 
-				HttpMethod.GET, 
-				null, 
-				String.class, 
-				request);
-		
-		return "hello world2！";
-	}
 	
 	@Trace(SpringMvcTracker.class)
 	@GetMapping("/feignServer2")
