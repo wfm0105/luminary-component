@@ -36,7 +36,11 @@ public class GenericTracker implements Tracker<TraceHolder> {
 	
 	private static final FastDateFormat ISO_DATETIME_TIME_ZONE_FORMAT_WITH_MILLIS = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
 
-	private TraceClient traceClient;
+	protected TraceClient traceClient;
+	
+	public GenericTracker () {
+		
+	}
 	
 	public GenericTracker (TraceClient traceClient) {
 		this.traceClient = traceClient;
@@ -52,25 +56,25 @@ public class GenericTracker implements Tracker<TraceHolder> {
 			
 			int level = 1;
 			if(TraceInfo.ORIGINAL_ROOT_RPC_ID.equals(traceInfo.getRpcId())) {
-				// 第一次入栈的处理逻辑
+				// 第一次入栈的处理逻辑，调用的总入口，此时rpcId为1
 				traceInfo.addHierarchy();
 				int maxSequenceNo = traceInfo.getHierarchyMaxSeqNo(level);
 				traceInfo.setSequenceNo(new AtomicInteger(maxSequenceNo+1));
 			}
 			else if(TraceInfo.RE_ORIGINAL_ROOT_RPC_ID.equals(traceInfo.getRpcId())) {
-				// 出栈到第一层的处理逻辑
+				// 出栈到第一层的处理逻辑，traceInfo.subHierarchy()后，rpcId变为1.0的时候
 				int maxSequenceNo = traceInfo.getHierarchyMaxSeqNo(level);
 				traceInfo.setSequenceNo(new AtomicInteger(maxSequenceNo+1));
 			} 
 			else if(traceInfo.getRootRpcId().equals(traceInfo.getRpcId())) {
-				// 跨线程后第一次入栈的处理逻辑
+				// 跨线程后第一次入栈的处理逻辑，比如通过http请求到另一个服务的mvc，或者hystrix新创建一个线程
 				traceInfo.addHierarchy();
 				level = traceInfo.getRpcId().split("[.]").length-1;
 				int maxSequenceNo = traceInfo.getHierarchyMaxSeqNo(level);
 				traceInfo.setSequenceNo(new AtomicInteger(maxSequenceNo+1));
 			} 
 			else {
-				// 普通情况的处理逻辑
+				// 普通情况的处理逻辑，一般大部分情况都是这个逻辑
 				traceInfo.addHierarchy();
 				level = traceInfo.getRpcId().split("[.]").length-1;
 				int maxSequenceNo = traceInfo.getHierarchyMaxSeqNo(level);
@@ -97,11 +101,11 @@ public class GenericTracker implements Tracker<TraceHolder> {
 		rpcTraceInfoVO.setRequestDateTime(ISO_DATETIME_TIME_ZONE_FORMAT_WITH_MILLIS.format(Calendar.getInstance().getTime()));
 		rpcTraceInfoVO.setTraceId(traceInfo.getTraceId());
 		rpcTraceInfoVO.setRpcId(traceInfo.getRpcId());
-		rpcTraceInfoVO.setRpcType(RpcTypeEnum.HTTP.name());
+		rpcTraceInfoVO.setRpcType(holder.getRpcType());
 		rpcTraceInfoVO.setServiceCategory(holder.getServiceCategory());
 		rpcTraceInfoVO.setServiceName(holder.getServiceName());
 		rpcTraceInfoVO.setMethodName(holder.getMethodName());
-		rpcTraceInfoVO.setRequestParam(holder.getRequestJson());
+		rpcTraceInfoVO.setRequestParam(holder.getRequestParam());
 		rpcTraceInfoVO.setServiceHost(holder.getServiceHost());
 		rpcTraceInfoVO.setClientHost(holder.getClientHost());
 		
@@ -173,11 +177,12 @@ public class GenericTracker implements Tracker<TraceHolder> {
 		private long startTime;
 		private String traceId;
 		private String rpcId;
+		private String rpcType;
 		private String profile;
 		private String serviceCategory;
 		private String serviceName;
 		private String methodName;
-		private String requestJson;
+		private String requestParam;
 		private String serviceHost;
 		private String clientHost;
 		private RpcTraceInfoVO entity;

@@ -4,8 +4,10 @@
 <configuration>
  
  <plugins>
-  <plugin interceptor="classpath:com.luminary.component.trace.tracker.MybatisTracker">
+  <plugin interceptor="com.luminary.component.trace.tracker.SpringMybatisTracker">
   </plugin>
+  <!-- <plugin interceptor="com.luminary.component.trace.demo.MInteceptor">
+  </plugin> -->
  </plugins>
  
 </configuration>

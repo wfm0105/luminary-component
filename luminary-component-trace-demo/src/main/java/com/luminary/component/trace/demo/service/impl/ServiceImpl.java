@@ -8,11 +8,13 @@
 */  
 package com.luminary.component.trace.demo.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.luminary.component.hystrix.tracker.HystrixTracker;
 import com.luminary.component.trace.annotation.Trace;
 import com.luminary.component.trace.demo.service.Service;
+import com.luminary.component.trace.demo.service.TestService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class ServiceImpl implements Service {
 
+	@Autowired
+	private TestService testService; 
+	
 	/* (non-Javadoc)  
 	 * <p>Title: feignServer2</p>  
 	 * <p>Description: </p>  
@@ -36,6 +41,7 @@ public class ServiceImpl implements Service {
 	@Override
 	public String feignServer2() {
 		log.info("hystrix");
+		testService.get(8);
 		return "hello world2";
 	}
 

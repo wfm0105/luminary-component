@@ -9,6 +9,7 @@
   
   <properties>
         <mybatis.version>3.4.6</mybatis.version>
+        <druid.version>0.2.26</druid.version>
   </properties>
   
   <dependencies>
@@ -29,6 +30,13 @@
 	    <groupId>org.mybatis</groupId>
 	    <artifactId>mybatis</artifactId>
 	    <version>${mybatis.version}</version>
+	    <scope>provide</scope>
+	</dependency>
+
+	<dependency>
+	    <groupId>com.alibaba</groupId>
+	    <artifactId>druid</artifactId>
+	    <version>${druid.version}</version>
 	    <scope>provide</scope>
 	</dependency>
 

@@ -16,6 +16,6 @@ package com.luminary.component.trace.demo.service;
 */
 public interface TestService {
 
-	long get();
+	long get(long number);
 	
 }

@@ -19,6 +19,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luminary.component.feign.tracker.FeignTracker;
@@ -88,6 +89,7 @@ public class TraceDemoApplication {
 			HttpServletRequest request,
 			HttpServletResponse response) {
 		
+		testService.get(888);
 		return "hello world3！";
 		
 	}
@@ -128,13 +130,15 @@ public class TraceDemoApplication {
 	}
 	
 	@Trace(SpringMvcTracker.class)
-	@GetMapping("/feignMybatisServer1")
+	@GetMapping("/feignMybatisServer1/{number}")
 	public String feignMybatisServer1(
+			@PathVariable("number") long number,
 			HttpServletRequest request,
 			HttpServletResponse response) {
 		
-		testService.get();
-		//service.feignServer3();
+		testService.get(number);
+		service.feignServer2();
+		service.feignServer3();
 		return "hello world！";
 		
 	}

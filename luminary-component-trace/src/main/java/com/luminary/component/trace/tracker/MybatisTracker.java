@@ -8,22 +8,26 @@
 */  
 package com.luminary.component.trace.tracker;
 
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
-import org.apache.ibatis.executor.statement.StatementHandler;
+import javax.sql.DataSource;
+
+import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.ResultHandler;
+import org.apache.ibatis.session.RowBounds;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.google.gson.Gson;
 import com.luminary.component.trace.client.TraceClient;
+import com.luminary.component.trace.model.RpcTypeEnum;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,10 +38,18 @@ import lombok.extern.slf4j.Slf4j;
 * @date 2018年7月27日下午5:14:39
 */
 @Slf4j
-@Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class })})
+@Intercepts({
+	@Signature(type = Executor.class, args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}, method = "query"),
+	@Signature(type = Executor.class, args = {MappedStatement.class, Object.class}, method = "update")
+})
 public class MybatisTracker extends GenericTracker implements Interceptor {
-
-	private String profile;
+	
+	private static String MAPPER_SEPARATOR = "Dao.";
+	private static String JDBC_PREFIX = "jdbc:";
+	
+	public MybatisTracker() {
+		super();
+	}
 	
 	/**  
 	* <p>Title: </p>  
@@ -48,11 +60,6 @@ public class MybatisTracker extends GenericTracker implements Interceptor {
 		super(traceClient);
 	}
 
-	public MybatisTracker(TraceClient traceClient, String profile) {
-		super(traceClient);
-		this.profile = profile;
-	}
-	
 	/* (non-Javadoc)  
 	 * <p>Title: intercept</p>  
 	 * <p>Description: </p>  
@@ -73,24 +80,63 @@ public class MybatisTracker extends GenericTracker implements Interceptor {
 			
 			Gson gson = new Gson();
 			
-			Map<String, Object> requestMap = new HashMap<String, Object>();
-		    List<String> requestList = new ArrayList<String>();
+			if(traceClient == null)
+				traceClient = getTraceClient();
 			
+		    String sqlId = "";
+		    Object parameter = null;
+		    MappedStatement mappedStatement = null;
+		    BoundSql boundSql = null;
+		    Configuration configuration = null;
+		    String jdbcUrl = "";
+		    
 			Object[] args = invocation.getArgs();
 		    for(Object arg : args) {
-		    	requestList.add(arg.toString());
+		    	if(arg != null) {
+		    		if(arg instanceof MappedStatement) {
+		    			mappedStatement = (MappedStatement) arg;
+		    			sqlId = mappedStatement.getId();
+		    		}
+		    		else if(!(arg instanceof RowBounds) && !(arg instanceof ResultHandler)) {
+		    			parameter = arg;
+		    		}
+		    	}
+		    }
+
+		    if(mappedStatement !=null && parameter != null) {
+		    	 boundSql = mappedStatement.getBoundSql(parameter);
+		    	 configuration = mappedStatement.getConfiguration();
 		    }
 		    
-		    requestMap.put("params", requestList);
+		    String methodName = sqlId.substring(sqlId.indexOf(MAPPER_SEPARATOR)+MAPPER_SEPARATOR.length());
+		    String serviceName = sqlId.substring(0, sqlId.lastIndexOf("."));
 		    
-			traceHolder.setProfile(profile);
+		    String requestParam = boundSql.getSql();
+		    
+		    if(parameter != null) {
+		    	requestParam = requestParam + "|" + gson.toJson(parameter);
+		    }
+		    
+		    traceHolder.setProfile(getProfile());
+		    traceHolder.setRpcType(RpcTypeEnum.DB.name());
 			traceHolder.setServiceCategory("mybatis");
-			traceHolder.setServiceName(invocation.getTarget().getClass().getName());
-			traceHolder.setMethodName(invocation.getMethod().getName());
-			traceHolder.setRequestJson(gson.toJson(requestMap));
+			traceHolder.setServiceName(serviceName);
+			traceHolder.setMethodName(methodName);
+			traceHolder.setRequestParam(requestParam);
 			
 			preHandle(traceHolder);
 			result = invocation.proceed();
+			
+			if(configuration != null) {
+				DataSource dataSource = configuration.getEnvironment().getDataSource();
+		    	 if(dataSource instanceof DruidDataSource) {
+		    		 jdbcUrl = ((DruidDataSource) dataSource).getUrl();
+		    	 }
+			}
+			String serviceHost = jdbcUrl.substring(jdbcUrl.indexOf(JDBC_PREFIX)+JDBC_PREFIX.length(), jdbcUrl.indexOf("?"));
+			
+			traceHolder.getEntity().setServiceHost(serviceHost);
+			
 			traceHolder.getEntity().setResponseInfo(result.toString());
 			postHandle(traceHolder);
 			
@@ -124,6 +170,16 @@ public class MybatisTracker extends GenericTracker implements Interceptor {
 	@Override
 	public void setProperties(Properties properties) {
 		
+	}
+	
+	public String getProfile() {
+		log.warn("默认实现方法");
+		return null;
+	}
+	
+	public TraceClient getTraceClient() {
+		log.warn("默认实现方法");
+		return null;
 	}
 
 }

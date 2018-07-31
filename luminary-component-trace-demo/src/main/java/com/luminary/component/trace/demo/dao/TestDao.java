@@ -9,6 +9,7 @@
 package com.luminary.component.trace.demo.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**  
 * <p>Title: TestDao</p>  
@@ -19,6 +20,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface TestDao {
 
-	long selectOne();
+	long selectNumber(@Param("number") long number);
 	
 }

@@ -33,8 +33,8 @@ public class TestServiceImpl implements TestService {
 	 * @see com.luminary.component.trace.demo.service.TestService#get()  
 	 */
 	@Override
-	public long get() {
-		return testDao.selectOne();
+	public long get(long number) {
+		return testDao.selectNumber(number);
 	}
 
 }
