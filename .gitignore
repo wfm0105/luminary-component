@@ -33,3 +33,5 @@ luminary-component-feign-spring-cloud-starter/target/
 luminary-component-hystrix-spring-cloud-starter/target/classes/com/luminary/component/hystrix/config/LuminaryHystrixAutoConfigure.class
 luminary-component-hystrix-spring-cloud-starter/target/
 luminary-component-ribbon-spring-cloud-starter/target/
+luminary-component-cache/target/
+luminary-component-cache-spring-boot-starter/target/

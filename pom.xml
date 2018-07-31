@@ -21,6 +21,8 @@
         <module>luminary-component-hystrix-spring-cloud-starter</module>
         <module>luminary-component-feign-spring-cloud-starter</module>
         <module>luminary-component-ribbon-spring-cloud-starter</module>
+        <module>luminary-component-cache</module>
+        <module>luminary-component-cache-spring-boot-starter</module>
     </modules>
    
     <packaging>pom</packaging>
