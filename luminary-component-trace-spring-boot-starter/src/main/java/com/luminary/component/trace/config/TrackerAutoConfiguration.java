@@ -16,30 +16,36 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.luminary.component.elasticsearch.JestClientMgr;
 import com.luminary.component.trace.client.ElasticsearchTraceClient;
 import com.luminary.component.trace.client.TraceClient;
+import com.luminary.component.trace.context.ProfileContext;
+import com.luminary.component.trace.context.TraceClientContext;
 import com.luminary.component.trace.holder.MvcHolder;
 import com.luminary.component.trace.interceptor.TraceInteceptor;
 import com.luminary.component.trace.properties.TraceProperties;
+import com.luminary.component.trace.tracker.GenericTracker.TraceHolder;
 import com.luminary.component.trace.tracker.SpringMvcTracker;
+import com.luminary.component.trace.tracker.SpringMybatisTracker;
 import com.luminary.component.trace.tracker.Tracker;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**  
 * <p>Title: SpringMvcTrackerAutoConfigure</p>  
-* <p>Description: 基于spring mvc的链路跟踪自动配置</p>  
+* <p>Description: 链路跟踪自动配置</p>  
 * @author wulinfeng
 * @date 2018年7月20日下午2:28:55
 */
 @Slf4j
 @Configuration
+@EnableAspectJAutoProxy
 @EnableConfigurationProperties(TraceProperties.class)
-public class SpringMvcTrackerAutoConfiguration implements WebMvcConfigurer {
+public class TrackerAutoConfiguration implements WebMvcConfigurer {
 
 	 @Value("${spring.profiles.active:default}")
 	 private String profile;
@@ -67,6 +73,13 @@ public class SpringMvcTrackerAutoConfiguration implements WebMvcConfigurer {
 		 return tracker;
 	 }
 	 
+	 @Bean
+	 public Tracker<TraceHolder> springMybatisTracker() throws IOException {
+		 TraceClient traceClient = traceClient();
+		 Tracker<TraceHolder> tracker = new SpringMybatisTracker(traceClient);
+		 return tracker;
+	 }
+	 
 	 @Override
      public void addInterceptors(InterceptorRegistry registry) {
 		TraceInteceptor traceInteceptor;
@@ -76,6 +89,20 @@ public class SpringMvcTrackerAutoConfiguration implements WebMvcConfigurer {
 		} catch (IOException e) {
 			log.error("trace拦截器设置失败！", e);
 		}
+	 }
+	 
+	 @Bean
+	 public ProfileContext profileContext() throws IOException {
+		 ProfileContext profileHelper = new ProfileContext();
+		 profileHelper.setProfile(profile);
+		 return profileHelper;
+	 }
+	 
+	 @Bean
+	 public TraceClientContext traceClientContext() throws IOException {
+		 TraceClientContext traceClientContext = new TraceClientContext();
+		 traceClientContext.setTraceClient(traceClient());
+		 return traceClientContext;
 	 }
 	
 }
