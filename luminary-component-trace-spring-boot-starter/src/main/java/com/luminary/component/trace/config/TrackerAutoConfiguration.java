@@ -13,8 +13,10 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -23,7 +25,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.luminary.component.elasticsearch.JestClientMgr;
 import com.luminary.component.trace.client.ElasticsearchTraceClient;
 import com.luminary.component.trace.client.TraceClient;
+import com.luminary.component.trace.condition.SpringMybatisTrackerCondition;
+import com.luminary.component.trace.condition.SpringRedisCacheTrackerCondition;
 import com.luminary.component.trace.context.ProfileContext;
+import com.luminary.component.trace.context.RedisContext;
 import com.luminary.component.trace.context.TraceClientContext;
 import com.luminary.component.trace.holder.MvcHolder;
 import com.luminary.component.trace.interceptor.TraceInteceptor;
@@ -31,6 +36,7 @@ import com.luminary.component.trace.properties.TraceProperties;
 import com.luminary.component.trace.tracker.GenericTracker.TraceHolder;
 import com.luminary.component.trace.tracker.SpringMvcTracker;
 import com.luminary.component.trace.tracker.SpringMybatisTracker;
+import com.luminary.component.trace.tracker.SpringRedisCacheTracker;
 import com.luminary.component.trace.tracker.Tracker;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +60,9 @@ public class TrackerAutoConfiguration implements WebMvcConfigurer {
 	 private TraceProperties traceProperties;
 	 
 	 @Autowired
+	 private RedisProperties redisProperties;
+	 
+	 @Autowired
 	 private JestClientMgr jestClientMgr;
 	 
 	 @Bean
@@ -74,9 +83,18 @@ public class TrackerAutoConfiguration implements WebMvcConfigurer {
 	 }
 	 
 	 @Bean
+	 @Conditional(SpringMybatisTrackerCondition.class)
 	 public Tracker<TraceHolder> springMybatisTracker() throws IOException {
 		 TraceClient traceClient = traceClient();
 		 Tracker<TraceHolder> tracker = new SpringMybatisTracker(traceClient);
+		 return tracker;
+	 }
+	 
+	 @Bean
+	 @Conditional(SpringRedisCacheTrackerCondition.class)
+	 public Tracker<TraceHolder> springRedisCacheTracker() throws IOException {
+		 TraceClient traceClient = traceClient();
+		 Tracker<TraceHolder> tracker = new SpringRedisCacheTracker(traceClient, profile, redisProperties.getHost() + ":" +redisProperties.getPort());
 		 return tracker;
 	 }
 	 
@@ -103,6 +121,15 @@ public class TrackerAutoConfiguration implements WebMvcConfigurer {
 		 TraceClientContext traceClientContext = new TraceClientContext();
 		 traceClientContext.setTraceClient(traceClient());
 		 return traceClientContext;
+	 }
+	 
+	 @Bean
+	 @Conditional(SpringRedisCacheTrackerCondition.class)
+	 public RedisContext redisContext() throws IOException {
+		 RedisContext redisContext = new RedisContext();
+		 redisContext.setHost(redisProperties.getHost());
+		 redisContext.setPort(redisProperties.getPort());
+		 return redisContext;
 	 }
 	
 }

@@ -30,4 +30,8 @@ public class TraceProperties {
 	
 	private String pathPatterns = "/**";
 	
+	private boolean disableMybatisTracker = false;
+	
+	private boolean disableRedisCacheTracker = false;
+	
 }

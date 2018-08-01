@@ -17,6 +17,7 @@ luminary:
   trace: 
     esIndex: trace-${date} 
     esType: demo2
+    disableRedisCacheTracker: true
     
 eureka: 
   client: 

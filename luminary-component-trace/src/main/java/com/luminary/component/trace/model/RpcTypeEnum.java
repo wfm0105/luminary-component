@@ -16,6 +16,6 @@ package com.luminary.component.trace.model;
 */
 public enum RpcTypeEnum {
 
-	HTTP, DB, REDIS, MQ, ES, DUBBO, OTHER
+	HTTP, DB, CACHE, MQ, ES, DUBBO, OTHER
 	
 }

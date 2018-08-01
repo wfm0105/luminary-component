@@ -22,6 +22,17 @@ spring:
     removeAbandonedTimeout: 1800
     logAbandoned: true      
     
+  redis: 
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password: xytkj123456654321
+    jedis: 
+      pool:
+        max-active: 8
+        max-wait: 1
+        min-idle: 0
+    
 server: 
   port: 8088
   
@@ -45,6 +56,9 @@ luminary:
   trace: 
     esIndex: trace-${date} 
     esType: demo1
+    
+  cache: 
+    interceptor: com.luminary.component.trace.tracker.SpringRedisCacheTracker
     
 eureka: 
   client: 

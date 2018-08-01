@@ -34,6 +34,12 @@
   	
   	<dependency>
   		<groupId>com.luminary.component</groupId>
+  		<artifactId>luminary-component-cache-spring-boot-starter</artifactId>
+  		<version>${self.version}</version>
+  	</dependency>
+  	
+  	<dependency>
+  		<groupId>com.luminary.component</groupId>
   		<artifactId>luminary-component-feign-spring-cloud-starter</artifactId>
   		<version>${self.version}</version>
   	</dependency>

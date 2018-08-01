@@ -60,6 +60,7 @@ public class SpringMybatisTracker extends MybatisTracker {
 		return ProfileContext.profile;
 	}
 
+	@Override
 	public TraceClient getTraceClient() {
 		return TraceClientContext.traceClient;
 	}

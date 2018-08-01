@@ -27,6 +27,13 @@
   	</dependency>
   	
   	<dependency>
+  		<groupId>com.luminary.component</groupId>
+  		<artifactId>luminary-component-cache-spring-boot-starter</artifactId>
+  		<version>${self.version}</version>
+  		<scope>provide</scope>
+  	</dependency>
+  	
+  	<dependency>
   		<groupId>org.springframework.boot</groupId>  
         <artifactId>spring-boot-starter-web</artifactId>  
         <scope>provide</scope>

@@ -8,8 +8,6 @@
 */  
 package com.luminary.component.trace.context;
 
-import org.springframework.beans.factory.annotation.Value;
-
 /**  
 * <p>Title: ContextHelper</p>  
 * <p>Description: 非spring管理的bean中用来获取profile</p>  
@@ -20,7 +18,6 @@ public class ProfileContext {
 	
 	public static String profile;
 
-	@Value("${spring.profiles.active:default}")
 	public void setProfile(String profile) {
 		ProfileContext.profile = profile;
 	}

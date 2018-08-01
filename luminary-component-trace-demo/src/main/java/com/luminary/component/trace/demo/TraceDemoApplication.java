@@ -109,7 +109,6 @@ public class TraceDemoApplication {
 			HttpServletRequest request,
 			HttpServletResponse response) {
 		
-		testService.get(number);
 		service.feignServer2();
 		service.feignServer3();
 		return "hello world！";

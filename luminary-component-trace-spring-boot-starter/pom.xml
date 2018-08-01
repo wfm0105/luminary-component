@@ -23,6 +23,13 @@
   	
   	<dependency>
   		<groupId>com.luminary.component</groupId>
+  		<artifactId>luminary-component-cache-spring-boot-starter</artifactId>
+  		<version>${self.version}</version>
+  		<scope>provide</scope>
+  	</dependency>
+  	
+  	<dependency>
+  		<groupId>com.luminary.component</groupId>
   		<artifactId>luminary-component-elasticsearch-spring-boot-starter</artifactId>
   		<version>${self.version}</version>
   	</dependency>
