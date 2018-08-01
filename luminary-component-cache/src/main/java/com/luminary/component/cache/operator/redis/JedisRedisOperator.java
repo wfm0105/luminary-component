@@ -55,4 +55,8 @@ public class JedisRedisOperator implements RedisOperator {
 		return jedisUtil.del(key);
 	}
 
+	public String getHostPort() {
+		return this.jedisUtil.getHost()+":"+jedisUtil.getPort();
+	}
+	
 }

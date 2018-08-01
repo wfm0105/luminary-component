@@ -288,7 +288,7 @@ public class JedisUtil {
 	 * @param key redis的key
 	 * @return
 	 */
-	public  long del(String key){
+	public long del(String key){
 		logger.info("JedisUtil.del.start,key="+key);
         Jedis jedis = init();
         //鉴权信息由用户名:密码拼接而成
@@ -413,4 +413,28 @@ public class JedisUtil {
 		}
 	}
 
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public static JedisPoolConfig getConfig() {
+		return config;
+	}
+
+	public static void setConfig(JedisPoolConfig config) {
+		JedisUtil.config = config;
+	}
+	
 }
