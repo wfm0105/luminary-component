@@ -21,8 +21,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 */
 public class RedisTemplateRedisOperator implements RedisOperator {
 
-	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
+	
+	public RedisTemplateRedisOperator(RedisTemplate<String, String> redisTemplate) {
+		this.redisTemplate = redisTemplate;
+	}
 	
 	@Override
 	public boolean setBit(String key, int offset, boolean value) {
@@ -49,6 +52,10 @@ public class RedisTemplateRedisOperator implements RedisOperator {
 	public long del(String key) {
 		redisTemplate.delete(key);
 		return 0;
+	}
+	
+	public String getHostPort() {
+		return redisTemplate.getConnectionFactory().getConnection().getClientName();
 	}
 
 }

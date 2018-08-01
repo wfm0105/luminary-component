@@ -8,6 +8,7 @@
 */  
 package com.luminary.component.cache.processor.redis;
 
+import com.luminary.component.cache.config.CacheConfiguration;
 import com.luminary.component.cache.expired.ExpiredStrategy;
 import com.luminary.component.cache.operator.redis.JedisRedisOperator;
 
@@ -22,19 +23,19 @@ import redis.clients.jedis.JedisPoolConfig;
 public class JedisRedisCacheProcessor extends RedisCacheProcessor{
 
 	public JedisRedisCacheProcessor(String key, String host, int port, String password) {
-		super(key, new JedisRedisOperator(host, port, password));
+		super(key, CacheConfiguration.wrapRedisOperator(new JedisRedisOperator(host, port, password)));
 	}
 	
 	public JedisRedisCacheProcessor(String key, JedisPoolConfig jedisPoolConfig, String host, int port, String password) {
-		super(key, new JedisRedisOperator(host, port, password, jedisPoolConfig));
+		super(key, CacheConfiguration.wrapRedisOperator(new JedisRedisOperator(host, port, password, jedisPoolConfig)));
 	}
 	
 	public JedisRedisCacheProcessor(String key, String host, int port, String password, ExpiredStrategy expiredStrategy) {
-		super(key, new JedisRedisOperator(host, port, password), expiredStrategy);
+		super(key, CacheConfiguration.wrapRedisOperator(new JedisRedisOperator(host, port, password)), expiredStrategy);
 	}
 	
 	public JedisRedisCacheProcessor(String key, JedisPoolConfig jedisPoolConfig, String host, int port, String password, ExpiredStrategy expiredStrategy) {
-		super(key, new JedisRedisOperator(host, port, password, jedisPoolConfig), expiredStrategy);
+		super(key, CacheConfiguration.wrapRedisOperator(new JedisRedisOperator(host, port, password, jedisPoolConfig)), expiredStrategy);
 	}
 	
 }

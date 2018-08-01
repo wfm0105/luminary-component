@@ -21,13 +21,15 @@ import com.luminary.component.cache.expired.ExpiredConstants;
 @ConfigurationProperties(prefix = "luminary.cache")
 public class CacheProperties {
 
-private int minExpiredSeconds = ExpiredConstants.MIN_EXPIRED_SECONDS;
+	private int minExpiredSeconds = ExpiredConstants.MIN_EXPIRED_SECONDS;
 	
 	private int maxExpiredSeconds = ExpiredConstants.MAX_EXPIRED_SECONDS;
 	
 	private boolean disableAll = false;
 	
 	private String[] disableKeys = {};
+	
+	private String interceptor;
 
 	public int getMinExpiredSeconds() {
 		return minExpiredSeconds;
@@ -59,6 +61,14 @@ private int minExpiredSeconds = ExpiredConstants.MIN_EXPIRED_SECONDS;
 
 	public void setDisableKeys(String[] disableKeys) {
 		this.disableKeys = disableKeys;
+	}
+
+	public String getInterceptor() {
+		return interceptor;
+	}
+
+	public void setInterceptor(String interceptor) {
+		this.interceptor = interceptor;
 	}
 	
 }

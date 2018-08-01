@@ -26,7 +26,7 @@ import com.luminary.component.cache.processor.AbstractCacheProcessor;
 */
 public class RedisCacheProcessor extends AbstractCacheProcessor{
 
-Logger logger = LoggerFactory.getLogger(RedisCacheProcessor.class);
+	Logger logger = LoggerFactory.getLogger(RedisCacheProcessor.class);
 	
 	private static final String BITMAP_KEY_SYMBOL = "_bitMap";
 	
@@ -42,7 +42,7 @@ Logger logger = LoggerFactory.getLogger(RedisCacheProcessor.class);
 //	
 //	private JedisUtil jedisUtil;
 	
-	protected RedisOperator redisOperate;
+	protected RedisOperator redisOperator;
 	
 	protected int minExpiredSeconds = ExpiredConstants.MIN_EXPIRED_SECONDS;
 	
@@ -52,26 +52,26 @@ Logger logger = LoggerFactory.getLogger(RedisCacheProcessor.class);
 		super(key);
 	}
 	
-	public RedisCacheProcessor(RedisOperator redisOperate) {
+	public RedisCacheProcessor(RedisOperator redisOperator) {
 		this.expiredStrategy = new BaseExpiredStrategy(minExpiredSeconds, maxExpiredSeconds);
-		this.redisOperate = redisOperate;
+		this.redisOperator = redisOperator;
 	}
 	
-	public RedisCacheProcessor(String key, RedisOperator redisOperate) {
+	public RedisCacheProcessor(String key, RedisOperator redisOperator) {
 		super(key);
 		this.expiredStrategy = new BaseExpiredStrategy(minExpiredSeconds, maxExpiredSeconds);
-		this.redisOperate = redisOperate;
+		this.redisOperator = redisOperator;
 	}
 	
-	public RedisCacheProcessor(RedisOperator redisOperate, ExpiredStrategy expiredStrategy) {
+	public RedisCacheProcessor(RedisOperator redisOperator, ExpiredStrategy expiredStrategy) {
 		this.expiredStrategy = expiredStrategy;
-		this.redisOperate = redisOperate;
+		this.redisOperator = redisOperator;
 	}
 	
-	public RedisCacheProcessor(String key, RedisOperator redisOperate, ExpiredStrategy expiredStrategy) {
+	public RedisCacheProcessor(String key, RedisOperator redisOperator, ExpiredStrategy expiredStrategy) {
 		super(key);
 		this.expiredStrategy = expiredStrategy;
-		this.redisOperate = redisOperate;
+		this.redisOperator = redisOperator;
 	}
 	
 	public RedisCacheProcessor(String key, boolean disableAll, String[] disableKeys) {
@@ -80,32 +80,32 @@ Logger logger = LoggerFactory.getLogger(RedisCacheProcessor.class);
 		this.disableKeys = disableKeys;
 	}
 	
-	public RedisCacheProcessor(RedisOperator redisOperate, boolean disableAll, String[] disableKeys) {
+	public RedisCacheProcessor(RedisOperator redisOperator, boolean disableAll, String[] disableKeys) {
 		this.expiredStrategy = new BaseExpiredStrategy(minExpiredSeconds, maxExpiredSeconds);
-		this.redisOperate = redisOperate;
+		this.redisOperator = redisOperator;
 		this.disableAll = disableAll;
 		this.disableKeys = disableKeys;
 	}
 	
-	public RedisCacheProcessor(String key, RedisOperator redisOperate, boolean disableAll, String[] disableKeys) {
+	public RedisCacheProcessor(String key, RedisOperator redisOperator, boolean disableAll, String[] disableKeys) {
 		super(key);
 		this.expiredStrategy = new BaseExpiredStrategy(minExpiredSeconds, maxExpiredSeconds);
-		this.redisOperate = redisOperate;
+		this.redisOperator = redisOperator;
 		this.disableAll = disableAll;
 		this.disableKeys = disableKeys;
 	}
 	
-	public RedisCacheProcessor(RedisOperator redisOperate, ExpiredStrategy expiredStrategy, boolean disableAll, String[] disableKeys) {
+	public RedisCacheProcessor(RedisOperator redisOperator, ExpiredStrategy expiredStrategy, boolean disableAll, String[] disableKeys) {
 		this.expiredStrategy = expiredStrategy;
-		this.redisOperate = redisOperate;
+		this.redisOperator = redisOperator;
 		this.disableAll = disableAll;
 		this.disableKeys = disableKeys;
 	}
 	
-	public RedisCacheProcessor(String key, RedisOperator redisOperate, ExpiredStrategy expiredStrategy, boolean disableAll, String[] disableKeys) {
+	public RedisCacheProcessor(String key, RedisOperator redisOperator, ExpiredStrategy expiredStrategy, boolean disableAll, String[] disableKeys) {
 		super(key);
 		this.expiredStrategy = expiredStrategy;
-		this.redisOperate = redisOperate;
+		this.redisOperator = redisOperator;
 		this.disableAll = disableAll;
 		this.disableKeys = disableKeys;
 	}
@@ -113,8 +113,8 @@ Logger logger = LoggerFactory.getLogger(RedisCacheProcessor.class);
 	@Override
 	public boolean simpleCache(String keyPrefix, String key, String data) {
 		int offset = HashAlgorithms.BKDRHash(key);
-		logger.info("RedisCacheProcesser.cache:keyPrefix="+keyPrefix+",key="+key+",offset="+offset);
-		redisOperate.setBit(mapKey(keyPrefix), offset, true);
+		logger.info("RedisCacheProcessor.cache:keyPrefix="+keyPrefix+",key="+key+",offset="+offset);
+		redisOperator.setBit(mapKey(keyPrefix), offset, true);
 		return true;
 	}
 	
@@ -140,44 +140,44 @@ Logger logger = LoggerFactory.getLogger(RedisCacheProcessor.class);
 	
 	private boolean doCache(String key, String data, ExpiredStrategy expiredStrategy) {
 		int offset = HashAlgorithms.BKDRHash(key);
-		logger.info("RedisCacheProcesser.cache:key="+key+",offset="+offset);
-		redisOperate.setBit(mapKey(key), offset, true);
+		logger.info("RedisCacheProcessor.cache:key="+key+",offset="+offset);
+		redisOperator.setBit(mapKey(key), offset, true);
 		
-		logger.info("RedisCacheProcesser.cache:key="+key+",value="+data);
-		redisOperate.set(key, data, expiredStrategy.expiredSeconds());
+		logger.info("RedisCacheProcessor.cache:key="+key+",value="+data);
+		redisOperator.set(key, data, expiredStrategy.expiredSeconds());
 		return true;
 	}
 	
 	public boolean doCache(String keyPrefix, String key, String data, ExpiredStrategy expiredStrategy) {
 		int offset = HashAlgorithms.BKDRHash(key);
-		logger.info("RedisCacheProcesser.cache:keyPrefix="+keyPrefix+",key="+key+",offset="+offset);
-		redisOperate.setBit(mapKey(keyPrefix), offset, true);
+		logger.info("RedisCacheProcessor.cache:keyPrefix="+keyPrefix+",key="+key+",offset="+offset);
+		redisOperator.setBit(mapKey(keyPrefix), offset, true);
 		
-		logger.info("RedisCacheProcesser.cache:key="+key+",value="+data);
-		redisOperate.set(key, data, expiredStrategy.expiredSeconds());
+		logger.info("RedisCacheProcessor.cache:key="+key+",value="+data);
+		redisOperator.set(key, data, expiredStrategy.expiredSeconds());
 		return true;
 	}
 
 	@Override
 	public boolean isValid(String keyPrefix, String key) {
 		int offset = HashAlgorithms.BKDRHash(key);
-		logger.info("RedisCacheProcesser.isValid:keyPrefix="+keyPrefix+"key="+key+",offset="+offset);
-		boolean isCachedByBitMap = redisOperate.getBit(mapKey(keyPrefix), offset);
-		logger.info("RedisCacheProcesser.isValid by bitmap:"+isCachedByBitMap);
+		logger.info("RedisCacheProcessor.isValid:keyPrefix="+keyPrefix+"key="+key+",offset="+offset);
+		boolean isCachedByBitMap = redisOperator.getBit(mapKey(keyPrefix), offset);
+		logger.info("RedisCacheProcessor.isValid by bitmap:"+isCachedByBitMap);
 		return isCachedByBitMap;
 	}
 	
 	@Override
 	public String getDataFromCache(String key) {
-		return redisOperate.get(key);
+		return redisOperator.get(key);
 	}
 	
 	@Override
 	public boolean deleteCache(String key) {
 		int offset = HashAlgorithms.BKDRHash(key);
-		logger.info("RedisCacheProcesser.deleteCache:key="+key+",offset="+offset);
-		//redisOperate.setBit(mapKey(key), offset, false);
-		redisOperate.del(key);
+		logger.info("RedisCacheProcessor.deleteCache:key="+key+",offset="+offset);
+		//redisOperator.setBit(mapKey(key), offset, false);
+		redisOperator.del(key);
 		return true;
 	}
 	
@@ -185,12 +185,12 @@ Logger logger = LoggerFactory.getLogger(RedisCacheProcessor.class);
 		return key+BITMAP_KEY_SYMBOL;
 	}
 	
-	public RedisOperator getRedisOperate() {
-		return redisOperate;
+	public RedisOperator getRedisOperator() {
+		return redisOperator;
 	}
 
-	public void setRedisOperate(RedisOperator redisOperate) {
-		this.redisOperate = redisOperate;
+	public void setRedisOperator(RedisOperator redisOperator) {
+		this.redisOperator = redisOperator;
 	}
 
 	public ExpiredStrategy getExpiredStrategy() {
@@ -199,11 +199,6 @@ Logger logger = LoggerFactory.getLogger(RedisCacheProcessor.class);
 
 	public void setExpiredStrategy(ExpiredStrategy expiredStrategy) {
 		this.expiredStrategy = expiredStrategy;
-	}
-
-	public static void main(String[] args) {
-		System.out.println(HashAlgorithms.BKDRHash("wulinfeng"));
-		System.out.println(HashAlgorithms.BKDRHash("sfesfesf"));
 	}
 
 }
