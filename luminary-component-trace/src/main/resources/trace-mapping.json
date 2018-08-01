@@ -1,0 +1,127 @@
+//PUT _template/trace
+{
+  "template": "trace-*",
+  "order": 0,
+  "setting": {
+    "index": {
+        "refresh_interval": "5s"
+    }
+  },
+  "mappings": {
+    "_default_": {
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "profile": {
+          "type": "keyword"
+        },
+        "traceId": {
+          "type": "keyword"
+        },
+        "rpcId": {
+          "type": "keyword"
+        },
+        "rpcType": {
+          "type": "keyword"
+        },
+    	"clientName": {
+    	  "norms": false,
+          "type": "text",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_max_word",
+          "fields": {
+          	"keyword": {
+          	  "type": "keyword",
+              "ignore_above": 256
+          	}
+          }
+        },
+        "clientHost": {
+          "norms": false,
+          "type": "text",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_max_word",
+          "fields": {
+          	"keyword": {
+          	  "type": "keyword",
+              "ignore_above": 256
+          	}
+          }
+        },
+        "serviceCategory": {
+          "type": "keyword"
+        },
+        "serviceName": {
+          "norms": false,
+          "type": "text",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_max_word",
+          "fields": {
+          	"keyword": {
+          	  "type": "keyword",
+              "ignore_above": 256
+          	}
+          }
+        },
+        "serviceHost": {
+          "norms": false,
+          "type": "text",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_max_word",
+          "fields": {
+          	"keyword": {
+          	  "type": "keyword",
+              "ignore_above": 256
+          	}
+          }
+        },
+        "methodName": {
+          "type": "keyword"
+        },
+        "requestDateTime": {
+          "type": "date"
+        },
+        "requestParam": {
+          "norms": false,
+          "type": "text",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_max_word",
+          "fields": {
+          	"keyword": {
+          	  "type": "keyword",
+              "ignore_above": 256
+          	}
+          }
+        },
+        "responseInfo": {
+          "norms": false,
+          "type": "text",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_max_word",
+          "fields": {
+          	"keyword": {
+          	  "type": "keyword",
+              "ignore_above": 256
+          	}
+          }
+        },
+        "result": {
+          "norms": false,
+          "type": "text",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_max_word",
+          "fields": {
+          	"keyword": {
+          	  "type": "keyword",
+              "ignore_above": 256
+          	}
+          }
+        },
+        "runTime": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

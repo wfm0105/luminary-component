@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: trace-demo-server
+    
+  datasource:
+    url: jdbc:mysql://localhost:3306/mypay?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&pinGlobalTxToPhysicalConnection=true&autoReconnect=true
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: nmamtf
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 0
+    maxIdle: 20
+    minIdle: 0
+    maxWait: 60000
+    validationQuery: select 1
+    testOnBorrow: false
+    testOnReturn: false
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 25200000
+    removeAbandoned: true
+    removeAbandonedTimeout: 1800
+    logAbandoned: true      
+    
+  redis: 
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password: xytkj123456654321
+    jedis: 
+      pool:
+        max-active: 8
+        max-wait: 1
+        min-idle: 0
+    
+server: 
+  port: 8088
+  
+mybatis:
+  #typeAliasesPackage: com.mypay.model.entity.*
+  mapperLocations: ["classpath:com/luminary/component/trace/demo/mappers/*.xml"] 
+  config-location: classpath:mybatis-config.xml
+
+luminary: 
+  elasticsearch:
+    username: elastic
+    password: 123456
+    server: 
+      - 127.0.0.1:9200
+    multiThreaded: true
+    maxTotalConnection: 20
+    maxTotalConnectionPerRoute: 5
+    discoveryEnabled: true
+    discorveryFrequency: 60
+    
+  trace: 
+    esIndex: trace-${date} 
+    esType: demo1
+    
+  cache: 
+    interceptor: com.luminary.component.trace.tracker.SpringRedisCacheTracker
+    
+eureka: 
+  client: 
+    serviceUrl: 
+      defaultZone: http://127.0.0.1:1111/eureka/
+
+feign: 
+  hystrix: 
+    enabled: true
+      
+hystrix: 
+  command: 
+    default: 
+      execution: 
+        isolation: 
+          thread: 
+            timeoutInMilliseconds: 8000

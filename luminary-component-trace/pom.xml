@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.luminary.component</groupId>
+    <artifactId>luminary-component</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <artifactId>luminary-component-trace</artifactId>
+  
+  <properties>
+        <mybatis.version>3.4.6</mybatis.version>
+        <druid.version>0.2.26</druid.version>
+  </properties>
+  
+  <dependencies>
+  
+  	<dependency>
+  		<groupId>com.luminary.component</groupId>
+  		<artifactId>luminary-component-util</artifactId>
+  		<version>${self.version}</version>
+  	</dependency>
+  
+  	<dependency>
+  		<groupId>com.luminary.component</groupId>
+  		<artifactId>luminary-component-elasticsearch</artifactId>
+  		<version>${self.version}</version>
+  	</dependency>
+  	
+  	<dependency>
+  		<groupId>com.luminary.component</groupId>
+  		<artifactId>luminary-component-cache-spring-boot-starter</artifactId>
+  		<version>${self.version}</version>
+  		<scope>provide</scope>
+  	</dependency>
+  	
+  	<dependency>
+  		<groupId>org.springframework.boot</groupId>  
+        <artifactId>spring-boot-starter-web</artifactId>  
+        <scope>provide</scope>
+  	</dependency>
+  	
+  	<dependency>
+	    <groupId>org.mybatis</groupId>
+	    <artifactId>mybatis</artifactId>
+	    <version>${mybatis.version}</version>
+	    <scope>provide</scope>
+	</dependency>
+
+	<dependency>
+	    <groupId>com.alibaba</groupId>
+	    <artifactId>druid</artifactId>
+	    <version>${druid.version}</version>
+	    <scope>provide</scope>
+	</dependency>
+
+	<dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+    </dependency>
+
+  	<dependency>
+  		<groupId>javax.servlet</groupId>
+  		<artifactId>javax.servlet-api</artifactId>
+  	</dependency>
+  	
+  </dependencies>
+  
+</project>

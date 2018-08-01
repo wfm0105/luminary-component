@@ -4,13 +4,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.luminroy.component</groupId>
-    <artifactId>luminroy-component</artifactId>
+    <groupId>com.luminary.component</groupId>
+    <artifactId>luminary-component</artifactId>
     <version>1.0.0</version>
     <modules>
-        <module>luminroy-component-util</module>
-        <module>luminory-component-elasticsearch</module>
+        <module>luminary-component-util</module>
+        <module>luminary-component-elasticsearch</module>
+        <module>luminary-component-logger</module>
+        <module>luminary-component-logger-demo</module>
+        <module>luminary-component-elasticsearch-spring-boot-starter</module>
+        <module>luminary-component-logger-spring-boot-starter</module>
+        <module>luminary-component-trace</module>
+        <module>luminary-component-trace-spring-boot-starter</module>
+        <module>luminary-component-trace-demo</module>
+        <module>luminary-component-trace-demo2</module>
+        <module>luminary-component-hystrix-spring-cloud-starter</module>
+        <module>luminary-component-feign-spring-cloud-starter</module>
+        <module>luminary-component-ribbon-spring-cloud-starter</module>
+        <module>luminary-component-cache</module>
+        <module>luminary-component-cache-spring-boot-starter</module>
     </modules>
+   
     <packaging>pom</packaging>
 
     <properties>
@@ -20,6 +34,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.platform.version>Cairo-SR2</spring.platform.version>
+        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
         <easypoi.version>2.3.1</easypoi.version>
         <self.version>1.0.0</self.version>
         <skipTests>true</skipTests>
@@ -35,6 +50,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            
+            <dependency>
+		      	<groupId>org.springframework.cloud</groupId>
+		        <artifactId>spring-cloud-dependencies</artifactId>
+		        <type>pom</type>
+		        <version>${spring-cloud.version}</version>
+		        <scope>import</scope>
+		    </dependency>
 
         </dependencies>
     </dependencyManagement>

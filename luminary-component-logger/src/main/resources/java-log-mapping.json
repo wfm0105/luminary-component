@@ -1,0 +1,102 @@
+//PUT _template/java-log
+{
+  "template": "java-log-*",
+  "order": 0,
+  "setting": {
+    "index": {
+        "refresh_interval": "5s"
+    }
+  },
+  "mappings": {
+    "_default_": {
+      "dynamic_templates": [
+        {
+          "message_field": {
+            "match_mapping_type": "string",
+            "path_match": "message",
+            "mapping": {
+              "norms": false,
+              "type": "text",
+              "analyzer": "ik_max_word",
+              "search_analyzer": "ik_max_word"
+            }
+          }
+        },
+        {
+          "throwable_field": {
+            "match_mapping_type": "string",
+            "path_match": "throwable",
+            "mapping": {
+              "norms": false,
+              "type": "text",
+              "analyzer": "ik_max_word",
+              "search_analyzer": "ik_max_word"
+            }
+          }
+        },
+        {
+          "string_field": {
+            "match_mapping_type": "string",
+            "match": "*",
+            "mapping": {
+              "norms": false,
+              "type": "text",
+              "analyzer": "ik_max_word",
+              "search_analyzer": "ik_max_word",
+              "fields": {
+                  "keyword": {
+                    "type": "keyword"
+                  }
+              }
+            }
+          }
+        }
+      ],
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+      	"applicationName": {
+          "norms": false,
+          "type": "text",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_max_word",
+          "fields": {
+          	"keyword": {
+          	  "type": "keyword",
+              "ignore_above": 256
+          	}
+          }
+        },
+        "profile": {
+          "type": "keyword"
+        },
+        "host": {
+          "type": "keyword"
+        },
+        "ip": {
+          "type": "ip"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "location": {
+          "properties": {
+            "line": {
+               "type": "integer"
+            }
+          }
+        },
+        "dateTime": {
+          "type": "date"
+        },
+        "traceId": {
+          "type": "keyword"
+        },
+        "rpcId": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}
