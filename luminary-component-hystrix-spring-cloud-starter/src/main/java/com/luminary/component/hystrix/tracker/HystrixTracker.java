@@ -23,6 +23,7 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -170,6 +171,10 @@ public class HystrixTracker extends GenericTracker implements Tracker<TraceHolde
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			exceptionHandle(traceHolder, e);
+		} finally {
+			TraceContext.removeTraceInfo();
+			MDC.remove(TraceInfo.TRACE_ID_KEY);
+			MDC.remove(TraceInfo.RPC_ID_KEY);
 		}
 			
 		return result;
